@@ -43,15 +43,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $brands;
 
     /**
-     * @var Collection<int, Project>
+     * @var Collection<int, UserProjects>
      */
-    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'user')]
-    private Collection $projects;
+    #[ORM\OneToMany(targetEntity: UserProjects::class, mappedBy: 'user')]
+    private Collection $userProjects;
 
     public function __construct()
     {
         $this->brands = new ArrayCollection();
-        $this->projects = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,32 +171,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Project>
+     * @return Collection<int, UserProjects>
      */
-    public function getProjects(): Collection
+    public function getUserProjects(): Collection
     {
-        return $this->projects;
+        return $this->userProjects;
     }
 
-    public function addProject(Project $project): static
+    public function addUserProject(UserProjects $userProject): static
     {
-        if (!$this->projects->contains($project)) {
-            $this->projects->add($project);
-            $project->setUser($this);
+        if (!$this->userProjects->contains($userProject)) {
+            $this->userProjects->add($userProject);
+            $userProject->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeProject(Project $project): static
+    public function removeUserProject(UserProjects $userProject): static
     {
-        if ($this->projects->removeElement($project)) {
+        if ($this->userProjects->removeElement($userProject)) {
             // set the owning side to null (unless already changed)
-            if ($project->getUser() === $this) {
-                $project->setUser(null);
+            if ($userProject->getUser() === $this) {
+                $userProject->setUser(null);
             }
         }
 
         return $this;
     }
+
+
 }

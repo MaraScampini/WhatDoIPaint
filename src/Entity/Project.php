@@ -57,14 +57,17 @@ class Project
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Brand $brand = null;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    /**
+     * @var Collection<int, UserProjects>
+     */
+    #[ORM\OneToMany(targetEntity: UserProjects::class, mappedBy: 'project')]
+    private Collection $userProjects;
 
     public function __construct()
     {
         $this->projectTechniques = new ArrayCollection();
         $this->reference = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -240,15 +243,35 @@ class Project
         return $this;
     }
 
-    public function getUser(): ?user
+    /**
+     * @return Collection<int, UserProjects>
+     */
+    public function getUserProjects(): Collection
     {
-        return $this->user;
+        return $this->userProjects;
     }
 
-    public function setUser(?user $user): static
+    public function addUserProject(UserProjects $userProject): static
     {
-        $this->user = $user;
+        if (!$this->userProjects->contains($userProject)) {
+            $this->userProjects->add($userProject);
+            $userProject->setProject($this);
+        }
 
         return $this;
     }
+
+    public function removeUserProject(UserProjects $userProject): static
+    {
+        if ($this->userProjects->removeElement($userProject)) {
+            // set the owning side to null (unless already changed)
+            if ($userProject->getProject() === $this) {
+                $userProject->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
