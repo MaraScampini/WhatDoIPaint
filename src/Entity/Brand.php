@@ -31,7 +31,7 @@ class Brand
     private Collection $projects;
 
     #[ORM\ManyToOne(inversedBy: 'brands')]
-    private ?User $user = null;
+    private ?user $user = null;
 
     public function __construct()
     {
@@ -109,12 +109,12 @@ class Brand
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?user
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?user $user): static
     {
         $this->user = $user;
 
