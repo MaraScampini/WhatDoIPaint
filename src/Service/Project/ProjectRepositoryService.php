@@ -26,6 +26,10 @@ class ProjectRepositoryService
         private readonly ProjectRepositoryInterface $projectRE,
         private readonly UserProjectsRepositoryInterface $userProjectsRE
     ) {}
+
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getProject(int $projectId): Project
     {
         $project = $this->projectRE->find($projectId);
@@ -33,6 +37,9 @@ class ProjectRepositoryService
         return $project;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getUser(int $userId): User
     {
         $user = $this->userRE->find($userId);
@@ -40,6 +47,9 @@ class ProjectRepositoryService
         return $user;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getStatus(int $statusId): Status
     {
         $status = $this->statusRE->find($statusId);
@@ -47,6 +57,9 @@ class ProjectRepositoryService
         return $status;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getLevel(int $levelId): Level
     {
         $level = $this->levelRE->find($levelId);
@@ -54,6 +67,9 @@ class ProjectRepositoryService
         return $level;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function getBrand(int $brandId): Brand
     {
         $brand = $this->brandRE->find($brandId);

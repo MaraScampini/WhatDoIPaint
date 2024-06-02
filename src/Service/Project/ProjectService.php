@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\User;
 use App\Entity\UserProjects;
 use App\Exception\CustomMessageException;
+use App\Exception\EntityNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService implements ProjectServiceInterface
@@ -17,6 +18,9 @@ class ProjectService implements ProjectServiceInterface
         private readonly EntityManagerInterface $em
     ) {}
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function createProject(array $projectData, User $user): void
     {
         $this->user = $user;
@@ -49,6 +53,9 @@ class ProjectService implements ProjectServiceInterface
         }
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     private function addUser(int $userId = null): void
     {
         $userProject = new UserProjects();
@@ -65,6 +72,10 @@ class ProjectService implements ProjectServiceInterface
         $this->em->persist($userProject);
     }
 
+    /**
+     * @throws CustomMessageException
+     * @throws EntityNotFoundException
+     */
     public function addExtraUser(array $projectData): void
     {
         $userId = $projectData['userId'];
