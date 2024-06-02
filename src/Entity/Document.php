@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\DocumentRepository;
+use App\Repository\Document\DocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DocumentRepository::class)]

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\ElementUpdateRepository;
+use App\Repository\ElementUpdate\ElementUpdateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ElementUpdateRepository::class)]

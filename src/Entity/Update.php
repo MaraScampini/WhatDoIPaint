@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\UpdateRepository;
+use App\Repository\Update\UpdateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
