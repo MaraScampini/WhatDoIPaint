@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Level|null findOneBy(array $criteria, array $orderBy = null)
  * @method Level[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LevelRepository extends ServiceEntityRepository
+class LevelRepository extends ServiceEntityRepository implements LevelRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

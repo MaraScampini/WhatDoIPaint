@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
 use App\Exception\InvalidCredentialsException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -16,7 +17,9 @@ class ExceptionHandler
         $exception = $event->getThrowable();
 
         if ($exception instanceof EntityNotFoundException ||
-            $exception instanceof InvalidCredentialsException) {
+            $exception instanceof InvalidCredentialsException ||
+            $exception instanceof CustomMessageException) {
+
             $response = new Response();
             $response->setContent($exception->getMessage());
             $response->setStatusCode($exception->getCode());

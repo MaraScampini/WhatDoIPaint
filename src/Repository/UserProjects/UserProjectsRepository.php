@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method UserProjects|null findOneBy(array $criteria, array $orderBy = null)
  * @method UserProjects[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserProjectsRepository extends ServiceEntityRepository
+class UserProjectsRepository extends ServiceEntityRepository implements UserProjectsRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
