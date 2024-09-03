@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Imgur;
 
 use App\Exception\CustomMessageException;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class ImgurService
 {
@@ -16,6 +21,14 @@ class ImgurService
         $this->client = HttpClient::create();
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws CustomMessageException
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function uploadImage(string $image)
     {
         $base64Data = explode(',', $image)[1];

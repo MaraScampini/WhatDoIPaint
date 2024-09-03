@@ -32,8 +32,6 @@ class ProjectService implements ProjectServiceInterface
         $level = $this->projectRepositorySE->getLevel($projectData['levelId']);
         $brand = $this->projectRepositorySE->getBrand($projectData['brandId']);
 
-
-
         $project->setStatus($status)
             ->setLevel($level)
             ->setBrand($brand)
