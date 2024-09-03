@@ -6,5 +6,5 @@ use App\Entity\Project;
 
 interface ReferenceServiceInterface
 {
-    public function createReference(array $referenceData): void;
+    public function createReferences(array $referenceData): void;
 }

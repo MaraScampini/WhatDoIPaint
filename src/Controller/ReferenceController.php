@@ -23,7 +23,7 @@ class ReferenceController extends AbstractController
     {
         $referenceData = json_decode($request->getContent(), true);
 
-        $referenceSE->createReference($referenceData);
+        $referenceSE->createReferences($referenceData);
 
         try {
             $this->em->flush();

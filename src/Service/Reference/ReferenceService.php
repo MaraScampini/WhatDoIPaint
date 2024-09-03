@@ -20,31 +20,37 @@ class ReferenceService implements ReferenceServiceInterface
 {
 
     public function __construct(
-        private readonly ImgurService $imgurSE,
+        private readonly ImgurService               $imgurSE,
         private readonly ProjectRepositoryInterface $projectRE,
-        private readonly EntityManagerInterface $em
-    ) {}
-
-
-    public function createReference(array $referenceData): void
+        private readonly EntityManagerInterface     $em
+    )
     {
-        $reference = new Reference();
+    }
 
+    public function createReferences(array $referenceData): void
+    {
         $projectId = $referenceData['projectId'];
-        if(!$projectId) throw new EntityNotFoundException('Project');
+        if (!$projectId) throw new EntityNotFoundException('Project');
 
         $project = $this->projectRE->find($projectId);
-        $reference->setProject($project);
 
-        if(isset($referenceData['image'])) {
-            $imageURL = $this->imgurSE->uploadImage($referenceData['image']);
-            $reference->setImage($imageURL);
+        if (isset($referenceData['images'])) {
+            foreach ($referenceData['images'] as $image) {
+                $imageURL = $this->imgurSE->uploadImage($image);
+                $reference = new Reference();
+                $reference->setProject($project);
+                $reference->setImage($imageURL);
+                $this->em->persist($reference);
+            }
         }
 
-        if(isset($referenceData['url'])) {
-            $reference->setUrl($referenceData['url']);
+        if (isset($referenceData['urls'])) {
+            foreach ($referenceData['urls'] as $url) {
+                $reference = new Reference();
+                $reference->setProject($project);
+                $reference->setUrl($url);
+                $this->em->persist($reference);
+            }
         }
-
-        $this->em->persist($reference);
     }
 }
