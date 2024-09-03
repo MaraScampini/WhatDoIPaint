@@ -35,6 +35,10 @@ class Element
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'elements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
+
     public function __construct()
     {
         $this->elementUpdates = new ArrayCollection();
@@ -119,6 +123,18 @@ class Element
     public function setStatus(?Status $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }
