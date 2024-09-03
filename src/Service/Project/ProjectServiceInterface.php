@@ -2,7 +2,6 @@
 
 namespace App\Service\Project;
 
-use App\Entity\Status;
 use App\Entity\User;
 
 interface ProjectServiceInterface

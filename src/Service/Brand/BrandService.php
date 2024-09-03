@@ -4,7 +4,6 @@ namespace App\Service\Brand;
 
 use App\Entity\Brand;
 use App\Entity\User;
-use App\Service\Brand\BrandServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class BrandService implements BrandServiceInterface

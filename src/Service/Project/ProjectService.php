@@ -7,7 +7,13 @@ use App\Entity\User;
 use App\Entity\UserProjects;
 use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
-use App\Service\ImgurService;
+use App\Repository\Brand\BrandRepositoryInterface;
+use App\Repository\Level\LevelRepositoryInterface;
+use App\Repository\Project\ProjectRepositoryInterface;
+use App\Repository\Status\StatusRepositoryInterface;
+use App\Repository\User\UserRepositoryInterface;
+use App\Repository\UserProjects\UserProjectsRepositoryInterface;
+use App\Service\Imgur\ImgurService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService implements ProjectServiceInterface
@@ -15,7 +21,12 @@ class ProjectService implements ProjectServiceInterface
     private User $user;
     private Project $newProject;
     public function __construct(
-        private readonly ProjectRepositoryService $projectRepositorySE,
+        private readonly UserProjectsRepositoryInterface $userProjectsRE,
+        private readonly BrandRepositoryInterface $brandRE,
+        private readonly StatusRepositoryInterface $statusRE,
+        private readonly ProjectRepositoryInterface $projectRE,
+        private readonly UserRepositoryInterface $userRE,
+        private readonly LevelRepositoryInterface $levelRE,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -23,14 +34,14 @@ class ProjectService implements ProjectServiceInterface
     /**
      * @throws EntityNotFoundException
      */
-    public function createProject(array $projectData, User $user): void
+    public function     createProject(array $projectData, User $user): void
     {
         $this->user = $user;
         $project = new Project();
 
-        $status = $this->projectRepositorySE->getStatus($projectData['statusId']);
-        $level = $this->projectRepositorySE->getLevel($projectData['levelId']);
-        $brand = $this->projectRepositorySE->getBrand($projectData['brandId']);
+        $status = $this->statusRE->find($projectData['statusId']);
+        $level = $this->levelRE->find($projectData['levelId']);
+        $brand = $this->brandRE->find($projectData['brandId']);
 
         $project->setStatus($status)
             ->setLevel($level)
@@ -72,7 +83,7 @@ class ProjectService implements ProjectServiceInterface
         if(!$userId) {
             $userProject->setUser($this->user);
         } else {
-            $user = $this->projectRepositorySE->getUser($userId);
+            $user = $this->userRE->find($userId);
             $userProject->setUser($user);
         }
 
@@ -88,10 +99,10 @@ class ProjectService implements ProjectServiceInterface
         $userId = $projectData['userId'];
         $projectId = $projectData['projectId'];
 
-        $user = $this->projectRepositorySE->getUser($userId);
-        $project = $this->projectRepositorySE->getProject($projectId);
+        $user = $this->userRE->find($userId);
+        $project = $this->projectRE->find($projectId);
 
-        $isInProject = $this->projectRepositorySE->checkIfUserAlreadyInProject($user, $project);
+        $isInProject = $this->checkIfUserAlreadyInProject($user, $project);
         if($isInProject) throw new CustomMessageException('User is already in that project');
 
         $userProject = new UserProjects();
@@ -102,5 +113,11 @@ class ProjectService implements ProjectServiceInterface
         $this->em->persist($userProject);
     }
 
+    public function checkIfUserAlreadyInProject(User $user, Project $project): bool
+    {
+        $userProject = $this->userProjectsRE->findOneBy(['user' => $user, 'project' => $project]);
+        if($userProject instanceof UserProjects) return true;
+        return false;
+    }
 
 }
