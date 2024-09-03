@@ -36,6 +36,7 @@ class AuthController extends ControllerService
     public function login(Request $request, AuthServiceInterface $authService): Response
     {
         $data = json_decode($request->getContent(), true);
+//        $data = $request->request->all();
 
         $userToken = $authService->login($data);
 

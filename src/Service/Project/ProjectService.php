@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserProjects;
 use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
+use App\Service\ImgurService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService implements ProjectServiceInterface
@@ -15,7 +16,8 @@ class ProjectService implements ProjectServiceInterface
     private Project $newProject;
     public function __construct(
         private readonly ProjectRepositoryService $projectRepositorySE,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly ImgurService $imgurSE
     ) {}
 
     /**
@@ -30,6 +32,8 @@ class ProjectService implements ProjectServiceInterface
         $level = $this->projectRepositorySE->getLevel($projectData['levelId']);
         $brand = $this->projectRepositorySE->getBrand($projectData['brandId']);
 
+
+
         $project->setStatus($status)
             ->setLevel($level)
             ->setBrand($brand)
@@ -37,6 +41,11 @@ class ProjectService implements ProjectServiceInterface
             ->setCreationDate(new \DateTime())
             ->setLastUpdate(new \DateTime())
             ->setPriority(false);
+
+        if(isset($projectData['image'])) {
+            $imageURL = $this->imgurSE->uploadImage($projectData['image']);
+            $project->setImage($imageURL);
+        }
 
         if(isset($projectData['description'])) $project->setDescription($projectData['description']);
 
