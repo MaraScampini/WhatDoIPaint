@@ -53,4 +53,20 @@ class ProjectController extends AbstractController
 
         return new Response('User added successfully to the project');
     }
+
+    #[Route('/project', methods: ['PUT'])]
+    public function editProject(Request $request, ProjectServiceInterface $projectSE): Response
+    {
+        $newProjectData = json_decode($request->getContent(), true);
+
+        $projectSE->editProject($newProjectData);
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $exception) {
+            return new Response('Project could not be edited', 500);
+        }
+
+        return new Response('Project edited successfully');
+    }
 }

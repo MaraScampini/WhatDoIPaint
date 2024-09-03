@@ -2,7 +2,10 @@
 
 namespace App\Service\Project;
 
+use App\Entity\Brand;
+use App\Entity\Level;
 use App\Entity\Project;
+use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\UserProjects;
 use App\Exception\CustomMessageException;
@@ -31,10 +34,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ImgurService $imgurSE
     ) {}
 
-    /**
-     * @throws EntityNotFoundException
-     */
-    public function     createProject(array $projectData, User $user): void
+    public function createProject(array $projectData, User $user): void
     {
         $this->user = $user;
         $project = new Project();
@@ -71,9 +71,6 @@ class ProjectService implements ProjectServiceInterface
         }
     }
 
-    /**
-     * @throws EntityNotFoundException
-     */
     private function addUser(int $userId = null): void
     {
         $userProject = new UserProjects();
@@ -92,7 +89,6 @@ class ProjectService implements ProjectServiceInterface
 
     /**
      * @throws CustomMessageException
-     * @throws EntityNotFoundException
      */
     public function addExtraUser(array $projectData): void
     {
@@ -113,11 +109,54 @@ class ProjectService implements ProjectServiceInterface
         $this->em->persist($userProject);
     }
 
-    public function checkIfUserAlreadyInProject(User $user, Project $project): bool
+    private function checkIfUserAlreadyInProject(User $user, Project $project): bool
     {
         $userProject = $this->userProjectsRE->findOneBy(['user' => $user, 'project' => $project]);
         if($userProject instanceof UserProjects) return true;
         return false;
     }
 
+    public function editProject(array $newProjectData): void
+    {
+        $projectId = $newProjectData['projectId'];
+        $project = $this->projectRE->find($projectId);
+        if(!$project instanceof Project) throw new EntityNotFoundException('Project');
+
+        if(isset($newProjectData['status'])) {
+            $status = $this->statusRE->find($newProjectData['status']);
+            if(!$status instanceof Status) throw new EntityNotFoundException('Status');
+            $project->setStatus($status);
+        }
+
+        if(isset($newProjectData['level'])) {
+            $level = $this->levelRE->find($newProjectData['level']);
+            if(!$level instanceof Level) throw new EntityNotFoundException('Level');
+            $project->setLevel($level);
+        }
+
+        if(isset($newProjectData['brand'])) {
+            $brand = $this->brandRE->find($newProjectData['brand']);
+            if(!$brand instanceof Brand) throw new EntityNotFoundException('Brand');
+            $project->setBrand($brand);
+        }
+
+        if(isset($newProjectData['name'])) {
+            $project->setName($newProjectData['name']);
+        }
+
+        if(isset($newProjectData['description'])) {
+            $project->setDescription($newProjectData['description']);
+        }
+
+        if(isset($newProjectData['isPriority'])) {
+            $project->setPriority($newProjectData['isPriority']);
+        }
+
+        if(isset($newProjectData['image'])) {
+            $imageURL = $this->imgurSE->uploadImage($newProjectData['image']);
+            $project->setImage($imageURL);
+        }
+
+        $this->em->persist($project);
+    }
 }
