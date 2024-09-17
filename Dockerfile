@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite for Symfony
 RUN a2enmod rewrite
 
+# Allow .htaccess to override configurations in the public directory
+RUN echo '<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+</Directory>\n' > /etc/apache2/conf-available/symfony.conf
+
+RUN a2enconf symfony
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -29,6 +36,9 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Set appropriate permissions for the Symfony cache and log directories
 RUN chown -R www-data:www-data /var/www/html/var \
     && chmod -R 775 /var/www/html/var
+
+# Set Apache DocumentRoot to /var/www/html/public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
 # Expose port 80
 EXPOSE 80
