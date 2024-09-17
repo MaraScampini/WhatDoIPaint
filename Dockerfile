@@ -20,6 +20,9 @@ WORKDIR /var/www/html
 # Copy project files to the working directory
 COPY . .
 
+# Create the var directory if it doesn't exist
+RUN mkdir -p /var/www/html/var
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
