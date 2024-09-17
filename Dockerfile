@@ -27,9 +27,6 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 RUN chown -R www-data:www-data /var/www/html/var \
     && chmod -R 775 /var/www/html/var
 
-# Copy the .env file to .env.local to set environment variables for production
-COPY .env .env.local
-
 # Expose port 80
 EXPOSE 80
 
