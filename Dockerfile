@@ -1,7 +1,7 @@
-FROM php:8.2-nginx
+FROM php:8.2
 
-# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
     unzip \
     libzip-dev \
