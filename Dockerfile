@@ -40,6 +40,12 @@ RUN chown -R www-data:www-data /var/www/html/var \
 # Set Apache DocumentRoot to /var/www/html/public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
+# Disable Apache modules that might interfere with headers
+RUN a2dismod authn_core authz_core
+
+# Set environment variable to prevent proxying
+ENV NO_PROXY=localhost
+
 # Expose port 80
 EXPOSE 80
 
