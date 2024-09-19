@@ -33,7 +33,11 @@ class AuthController extends ControllerService
     {
         $data = json_decode($request->getContent(), true);
 
+        try {
         $userToken = $authService->login($data);
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), $e->getCode());
+        }
 
         return new Response($userToken);
     }
