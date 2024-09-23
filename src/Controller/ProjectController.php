@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Project\ProjectServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,6 +21,17 @@ class ProjectController extends AbstractController
         private EntityManagerInterface $em
     )
     {
+    }
+
+    #[Route('/project', methods: ['GET'])]
+    public function getUserProjects(UserProjectsRepositoryInterface $userProjectsRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $projects = $userProjectsRepository->getProjectsByUser($user);
+
+        return new JsonResponse($projects);
     }
 
     #[Route('/project', methods: ['POST'])]

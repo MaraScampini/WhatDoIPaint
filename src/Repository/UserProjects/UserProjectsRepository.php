@@ -2,6 +2,7 @@
 
 namespace App\Repository\UserProjects;
 
+use App\Entity\User;
 use App\Entity\UserProjects;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,18 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserProjects::class);
+    }
+
+    public function getProjectsByUser(User $user): ?array
+    {
+        return $this->createQueryBuilder('USER_PROJECTS')
+            ->select('
+            PROJECT.id, PROJECT.name, PROJECT.image, PROJECT.isPriority')
+            ->leftJoin('USER_PROJECTS.project', 'PROJECT')
+            ->andWhere('USER_PROJECTS.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
 }
