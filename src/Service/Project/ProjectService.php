@@ -48,8 +48,7 @@ class ProjectService implements ProjectServiceInterface
             ->setBrand($brand)
             ->setName($projectData['name'])
             ->setCreationDate(new \DateTime())
-            ->setLastUpdate(new \DateTime())
-            ->setPriority(false);
+            ->setLastUpdate(new \DateTime());
 
         if(isset($projectData['image'])) {
             $imageURL = $this->imgurSE->uploadImage($projectData['image']);
@@ -61,7 +60,8 @@ class ProjectService implements ProjectServiceInterface
         $this->em->persist($project);
         $this->newProject = $project;
 
-        $this->addUser();
+        $userProject = $this->addUser();
+        $userProject->setPriority($projectData['priority']);
 
         if(isset($projectData['users'])) {
             $users = $projectData['users'];
@@ -71,7 +71,7 @@ class ProjectService implements ProjectServiceInterface
         }
     }
 
-    private function addUser(int $userId = null): void
+    private function addUser(int $userId = null): UserProjects
     {
         $userProject = new UserProjects();
         $userProject->setProject($this->newProject)
@@ -82,9 +82,11 @@ class ProjectService implements ProjectServiceInterface
         } else {
             $user = $this->userRE->find($userId);
             $userProject->setUser($user);
+            $userProject->setPriority(false);
         }
 
         $this->em->persist($userProject);
+        return $userProject;
     }
 
     /**
