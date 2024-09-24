@@ -165,13 +165,10 @@ class ProjectService implements ProjectServiceInterface
     /**
      * @throws EntityNotFoundException
      */
-    public function togglePriority(string $projectId, User $user): void
+    public function togglePriority(string $userProjectId, User $user): void
     {
-        $project = $this->projectRE->find($projectId);
-        if(!$project instanceof Project) throw new EntityNotFoundException('Project');
-
-        $userProject = $this->userProjectsRE->findOneBy(['user' => $user, 'project' => $project]);
-        if(!$userProject instanceof UserProjects) throw new CustomMessageException('You cannot edit that project');
+        $userProject = $this->userProjectsRE->find($userProjectId);
+        if(!$userProject instanceof UserProjects || $userProject->getUser() !== $user) throw new CustomMessageException('You cannot edit that project');
 
         $projectPriority = $userProject->isPriority();
         $userProject->setPriority(!$projectPriority);
