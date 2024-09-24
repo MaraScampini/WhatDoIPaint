@@ -28,9 +28,6 @@ class Project
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastUpdate = null;
 
-    #[ORM\Column]
-    private ?bool $isPriority = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -126,18 +123,6 @@ class Project
     public function setLastUpdate(\DateTimeInterface $lastUpdate): static
     {
         $this->lastUpdate = $lastUpdate;
-
-        return $this;
-    }
-
-    public function isPriority(): ?bool
-    {
-        return $this->isPriority;
-    }
-
-    public function setPriority(bool $isPriority): static
-    {
-        $this->isPriority = $isPriority;
 
         return $this;
     }
