@@ -15,11 +15,11 @@ class StaticUtilities
     public static function getLevelSelector(): array
     {
         return [
-            ['id' => self::$LEVEL_RELAX, 'name' => 'Relaxed'],
-            ['id' => self::$LEVEL_FOCUSED, 'name' => 'Focused'],
-            ['id' => self::$LEVEL_ALL_OUT, 'name' => 'All out'],
-            ['id' => self::$LEVEL_COMPETITION, 'name' => 'Competition'],
-            ['id' => self::$LEVEL_ARMY_PAINTING, 'name' => 'Army painting']
+            ['id' => self::$LEVEL_RELAX, 'label' => 'Relaxed'],
+            ['id' => self::$LEVEL_FOCUSED, 'label' => 'Focused'],
+            ['id' => self::$LEVEL_ALL_OUT, 'label' => 'All out'],
+            ['id' => self::$LEVEL_COMPETITION, 'label' => 'Competition'],
+            ['id' => self::$LEVEL_ARMY_PAINTING, 'label' => 'Army painting']
         ];
     }
 
