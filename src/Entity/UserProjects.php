@@ -24,6 +24,9 @@ class UserProjects
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $incorporationDate = null;
 
+    #[ORM\Column]
+    private ?bool $priority = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class UserProjects
     public function setIncorporationDate(\DateTimeInterface $incorporationDate): static
     {
         $this->incorporationDate = $incorporationDate;
+
+        return $this;
+    }
+
+    public function isPriority(): ?bool
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(bool $priority): static
+    {
+        $this->priority = $priority;
 
         return $this;
     }

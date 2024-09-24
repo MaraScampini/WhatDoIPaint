@@ -24,7 +24,7 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
     {
         return $this->createQueryBuilder('USER_PROJECTS')
             ->select('
-            PROJECT.id, PROJECT.name, PROJECT.image, PROJECT.isPriority')
+            PROJECT.id, PROJECT.name, PROJECT.image, USER_PROJECTS.priority')
             ->leftJoin('USER_PROJECTS.project', 'PROJECT')
             ->andWhere('USER_PROJECTS.user = :user')
             ->setParameter('user', $user)

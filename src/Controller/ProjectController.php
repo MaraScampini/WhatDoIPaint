@@ -82,4 +82,19 @@ class ProjectController extends AbstractController
 
         return new Response('Project edited successfully');
     }
+
+    #[Route('/project/toggle/{id}', methods: ['PUT'])]
+    public function toggleProjectPriority(ProjectServiceInterface $projectService, $id): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $projectService->togglePriority($id, $user);
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return new Response('The project could not be edited', 500);
+        }
+        return new Response('Priority toggled correctly');
+    }
 }
