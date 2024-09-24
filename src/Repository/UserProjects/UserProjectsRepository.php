@@ -28,6 +28,7 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
             ->leftJoin('USER_PROJECTS.project', 'PROJECT')
             ->andWhere('USER_PROJECTS.user = :user')
             ->setParameter('user', $user)
+            ->orderBy('PROJECT.lastUpdate')
             ->getQuery()
             ->getResult();
     }
