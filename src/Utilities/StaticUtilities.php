@@ -40,23 +40,23 @@ class StaticUtilities
     public static int $TECHNIQUE_TMM = 13;
     public static int $TECHNIQUE_HAIR_FUR = 14;
 
-    public static function techniqueSelector(): array
+    public static function getTechniquesSelector(): array
     {
         return [
-            ['id' => self::$TECHNIQUE_LAYERING, 'name' => 'Layering'],
-            ['id' => self::$TECHNIQUE_NMM, 'name' => 'Non-Metallic Metal (NMM)'],
-            ['id' => self::$TECHNIQUE_OSL, 'name' => 'Object Source Lighting (OSL)'],
-            ['id' => self::$TECHNIQUE_SKIN, 'name' => 'Skin'],
-            ['id' => self::$TECHNIQUE_FABRIC, 'name' => 'Fabric'],
-            ['id' => self::$TECHNIQUE_LEATHER, 'name' => 'Leather'],
-            ['id' => self::$TECHNIQUE_GEMS, 'name' => 'Gems'],
-            ['id' => self::$TECHNIQUE_WEATHERING, 'name' => 'Weathering'],
-            ['id' => self::$TECHNIQUE_WET_BLENDING, 'name' => 'Wet blending'],
-            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'name' => 'Dry brush'],
-            ['id' => self::$TECHNIQUE_BASING, 'name' => 'Basing'],
-            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'name' => 'Stippled blending'],
-            ['id' => self::$TECHNIQUE_TMM, 'name' => 'True Metallic Metal (TMM)'],
-            ['id' => self::$TECHNIQUE_HAIR_FUR, 'name' => 'Hair or animal fur']
+            ['id' => self::$TECHNIQUE_LAYERING, 'label' => 'Layering'],
+            ['id' => self::$TECHNIQUE_NMM, 'label' => 'Non-Metallic Metal (NMM)'],
+            ['id' => self::$TECHNIQUE_OSL, 'label' => 'Object Source Lighting (OSL)'],
+            ['id' => self::$TECHNIQUE_SKIN, 'label' => 'Skin'],
+            ['id' => self::$TECHNIQUE_FABRIC, 'label' => 'Fabric'],
+            ['id' => self::$TECHNIQUE_LEATHER, 'label' => 'Leather'],
+            ['id' => self::$TECHNIQUE_GEMS, 'label' => 'Gems'],
+            ['id' => self::$TECHNIQUE_WEATHERING, 'label' => 'Weathering'],
+            ['id' => self::$TECHNIQUE_WET_BLENDING, 'label' => 'Wet blending'],
+            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'label' => 'Dry brush'],
+            ['id' => self::$TECHNIQUE_BASING, 'label' => 'Basing'],
+            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'label' => 'Stippled blending'],
+            ['id' => self::$TECHNIQUE_TMM, 'label' => 'True Metallic Metal (TMM)'],
+            ['id' => self::$TECHNIQUE_HAIR_FUR, 'label' => 'Hair or animal fur']
         ];
     }
 
