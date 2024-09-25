@@ -43,20 +43,20 @@ class StaticUtilities
     public static function getTechniquesSelector(): array
     {
         return [
-            ['id' => self::$TECHNIQUE_LAYERING, 'label' => 'Layering'],
-            ['id' => self::$TECHNIQUE_NMM, 'label' => 'Non-Metallic Metal (NMM)'],
-            ['id' => self::$TECHNIQUE_OSL, 'label' => 'Object Source Lighting (OSL)'],
-            ['id' => self::$TECHNIQUE_SKIN, 'label' => 'Skin'],
-            ['id' => self::$TECHNIQUE_FABRIC, 'label' => 'Fabric'],
-            ['id' => self::$TECHNIQUE_LEATHER, 'label' => 'Leather'],
-            ['id' => self::$TECHNIQUE_GEMS, 'label' => 'Gems'],
-            ['id' => self::$TECHNIQUE_WEATHERING, 'label' => 'Weathering'],
-            ['id' => self::$TECHNIQUE_WET_BLENDING, 'label' => 'Wet blending'],
-            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'label' => 'Dry brush'],
-            ['id' => self::$TECHNIQUE_BASING, 'label' => 'Basing'],
-            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'label' => 'Stippled blending'],
-            ['id' => self::$TECHNIQUE_TMM, 'label' => 'True Metallic Metal (TMM)'],
-            ['id' => self::$TECHNIQUE_HAIR_FUR, 'label' => 'Hair or animal fur']
+            ['id' => self::$TECHNIQUE_LAYERING, 'value' => self::$TECHNIQUE_LAYERING, 'label' => 'Layering'],
+            ['id' => self::$TECHNIQUE_NMM, 'value' => self::$TECHNIQUE_NMM, 'label' => 'Non-Metallic Metal (NMM)'],
+            ['id' => self::$TECHNIQUE_OSL, 'value' => self::$TECHNIQUE_OSL, 'label' => 'Object Source Lighting (OSL)'],
+            ['id' => self::$TECHNIQUE_SKIN, 'value' => self::$TECHNIQUE_SKIN, 'label' => 'Skin'],
+            ['id' => self::$TECHNIQUE_FABRIC, 'value' => self::$TECHNIQUE_FABRIC, 'label' => 'Fabric'],
+            ['id' => self::$TECHNIQUE_LEATHER, 'value' => self::$TECHNIQUE_LEATHER, 'label' => 'Leather'],
+            ['id' => self::$TECHNIQUE_GEMS, 'value' => self::$TECHNIQUE_GEMS, 'label' => 'Gems'],
+            ['id' => self::$TECHNIQUE_WEATHERING, 'value' => self::$TECHNIQUE_WEATHERING, 'label' => 'Weathering'],
+            ['id' => self::$TECHNIQUE_WET_BLENDING, 'value' => self::$TECHNIQUE_WET_BLENDING, 'label' => 'Wet blending'],
+            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'value' => self::$TECHNIQUE_DRY_BRUSH, 'label' => 'Dry brush'],
+            ['id' => self::$TECHNIQUE_BASING, 'value' => self::$TECHNIQUE_BASING, 'label' => 'Basing'],
+            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'value' => self::$TECHNIQUE_STIPPLED_BLENDING, 'label' => 'Stippled blending'],
+            ['id' => self::$TECHNIQUE_TMM, 'value' => self::$TECHNIQUE_TMM, 'label' => 'True Metallic Metal (TMM)'],
+            ['id' => self::$TECHNIQUE_HAIR_FUR, 'value' => self::$TECHNIQUE_HAIR_FUR, 'label' => 'Hair or animal fur']
         ];
     }
 
