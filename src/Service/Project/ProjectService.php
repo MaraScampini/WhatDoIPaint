@@ -42,9 +42,9 @@ class ProjectService implements ProjectServiceInterface
         $this->user = $user;
         $project = new Project();
 
-        $status = $this->statusRE->find($projectData['statusId']);
-        $level = $this->levelRE->find($projectData['levelId']);
-        $brand = $this->brandRE->find($projectData['brandId']);
+        $status = $this->statusRE->find(1);
+        $level = $this->levelRE->find($projectData['level']);
+        $brand = $this->brandRE->find($projectData['brand']);
 
         $project->setStatus($status)
             ->setLevel($level)
