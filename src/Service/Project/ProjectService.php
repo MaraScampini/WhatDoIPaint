@@ -5,6 +5,7 @@ namespace App\Service\Project;
 use App\Entity\Brand;
 use App\Entity\Level;
 use App\Entity\Project;
+use App\Entity\ProjectTechnique;
 use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\UserProjects;
@@ -14,6 +15,7 @@ use App\Repository\Brand\BrandRepositoryInterface;
 use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
+use App\Repository\Technique\TechniqueRepositoryInterface;
 use App\Repository\User\UserRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Imgur\ImgurService;
@@ -30,6 +32,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ProjectRepositoryInterface $projectRE,
         private readonly UserRepositoryInterface $userRE,
         private readonly LevelRepositoryInterface $levelRE,
+        private readonly TechniqueRepositoryInterface $techniqueRE,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -67,6 +70,16 @@ class ProjectService implements ProjectServiceInterface
             $users = $projectData['users'];
             foreach($users as $userId) {
                 $this->addUser($userId);
+            }
+        }
+
+        if(isset($projectData['techniques'])) {
+            foreach($projectData['techniques'] as $techniqueId) {
+                $technique = $this->techniqueRE->find($techniqueId);
+                $projectTechnique = new ProjectTechnique();
+                $projectTechnique->setProject($project);
+                $projectTechnique->setTechnique($technique);
+                $this->em->persist($projectTechnique);
             }
         }
     }
