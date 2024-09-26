@@ -53,12 +53,12 @@ class ProjectService implements ProjectServiceInterface
             ->setCreationDate(new \DateTime())
             ->setLastUpdate(new \DateTime());
 
-        if(isset($projectData['image'])) {
+        if(isset($projectData['image']) && $projectData['image'] !== "") {
             $imageURL = $this->imgurSE->uploadImage($projectData['image']);
             $project->setImage($imageURL);
         }
 
-        if(isset($projectData['description'])) $project->setDescription($projectData['description']);
+        if(isset($projectData['description']) && $projectData['description'] !== "") $project->setDescription($projectData['description']);
 
         $this->em->persist($project);
         $this->newProject = $project;
@@ -66,14 +66,14 @@ class ProjectService implements ProjectServiceInterface
         $userProject = $this->addUser();
         $userProject->setPriority($projectData['priority']);
 
-        if(isset($projectData['users'])) {
+        if(isset($projectData['users']) && count($projectData['users']) > 0) {
             $users = $projectData['users'];
             foreach($users as $userId) {
                 $this->addUser($userId);
             }
         }
 
-        if(isset($projectData['techniques'])) {
+        if(isset($projectData['techniques']) && count($projectData['techniques']) > 0) {
             foreach($projectData['techniques'] as $techniqueId) {
                 $technique = $this->techniqueRE->find($techniqueId);
                 $projectTechnique = new ProjectTechnique();
