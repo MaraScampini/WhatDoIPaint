@@ -19,7 +19,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
         parent::__construct($registry, Project::class);
     }
 
-    public function getProjectById(int $id): ?array
+    public function getProjectBasicInfoById(int $id): ?array
     {
         return $this->createQueryBuilder('PROJECT')
             ->select('PROJECT.name, PROJECT.description, BRAND.name AS brand, LEVEL.name AS level')
@@ -33,4 +33,8 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
             ->getQuery()
             ->getSingleResult();
     }
+
+
+
+
 }

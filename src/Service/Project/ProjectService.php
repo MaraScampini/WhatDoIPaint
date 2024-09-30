@@ -12,9 +12,11 @@ use App\Entity\UserProjects;
 use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
 use App\Repository\Brand\BrandRepositoryInterface;
+use App\Repository\Element\ElementRepositoryInterface;
 use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
+use App\Repository\Squad\SquadRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Technique\TechniqueRepositoryInterface;
 use App\Repository\User\UserRepositoryInterface;
@@ -35,6 +37,8 @@ class ProjectService implements ProjectServiceInterface
         private readonly LevelRepositoryInterface $levelRE,
         private readonly TechniqueRepositoryInterface $techniqueRE,
         private readonly ProjectTechniqueRepositoryInterface $projectTechniqueRepository,
+        private readonly ElementRepositoryInterface $elementRepository,
+        private readonly SquadRepositoryInterface $squadRepository,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -193,11 +197,27 @@ class ProjectService implements ProjectServiceInterface
 
     public function getProjectInfoById(int $projectId): array
     {
-        $projectBasicInfo = $this->projectRE->getProjectById($projectId);
-        $projectTechniques = $this->projectTechniqueRepository->projectTechniquesByProjectId($projectId);
+        $projectBasicInfo = $this->projectRE->getProjectBasicInfoById($projectId);
+        $projectTechniques = $this->projectTechniqueRepository->getProjectTechniquesByProjectId($projectId);
+        $projectElements = $this->elementRepository->getElementsByProjectId($projectId);
+        $projectSquads = $this->squadRepository->getSquadsByProjectId($projectId);
+        $projectSquads = $this->getElementsBySquad($projectSquads);
 
         $projectBasicInfo['techniques'] = $projectTechniques;
+        $projectBasicInfo['elements'] = $projectElements;
+        $projectBasicInfo['squads'] = $projectSquads;
 
         return $projectBasicInfo;
+    }
+
+    private function getElementsBySquad(array $squads): array
+    {
+        foreach($squads as &$squad) {
+            $squadId = $squad['id'];
+            $elements = $this->elementRepository->getElementsBySquad($squadId);
+            $squad['elements'] = $elements;
+        }
+
+        return $squads;
     }
 }

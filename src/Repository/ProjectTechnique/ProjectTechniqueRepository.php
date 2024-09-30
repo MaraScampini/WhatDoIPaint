@@ -19,7 +19,7 @@ class ProjectTechniqueRepository extends ServiceEntityRepository implements Proj
         parent::__construct($registry, ProjectTechnique::class);
     }
 
-    public function projectTechniquesByProjectId(int $projectId): ?array
+    public function getProjectTechniquesByProjectId(int $projectId): ?array
     {
         return $this->createQueryBuilder('PROJECT_TECHNIQUE')
             ->select('TECHNIQUE.name AS technique')
