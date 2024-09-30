@@ -13,6 +13,7 @@ use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
 use App\Repository\Brand\BrandRepositoryInterface;
 use App\Repository\Element\ElementRepositoryInterface;
+use App\Repository\ElementUpdate\ElementUpdateRepositoryInterface;
 use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
@@ -39,6 +40,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ProjectTechniqueRepositoryInterface $projectTechniqueRepository,
         private readonly ElementRepositoryInterface $elementRepository,
         private readonly SquadRepositoryInterface $squadRepository,
+        private readonly ElementUpdateRepositoryInterface $elementUpdateRepository,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -219,5 +221,10 @@ class ProjectService implements ProjectServiceInterface
         }
 
         return $squads;
+    }
+
+    public function getUpdatesByProjectId(int $projectId): array
+    {
+        return $this->elementUpdateRepository->getUpdatesByProjectId($projectId);
     }
 }

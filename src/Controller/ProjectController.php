@@ -39,8 +39,9 @@ class ProjectController extends AbstractController
     public function getProjectById(ProjectServiceInterface $projectService, int $id): Response
     {
         $projectInfo = $projectService->getProjectInfoById($id);
+        $projectUpdates = $projectService->getUpdatesByProjectId($id);
 
-        return new JsonResponse($projectInfo);
+        return new JsonResponse(['info' => $projectInfo, 'updates' => $projectUpdates]);
     }
 
     #[Route('/project', methods: ['POST'])]
