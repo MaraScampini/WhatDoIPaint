@@ -206,10 +206,12 @@ class ProjectService implements ProjectServiceInterface
         $projectElements = $this->elementRepository->getElementsByProjectId($projectId);
         $projectSquads = $this->squadRepository->getSquadsByProjectId($projectId);
         $projectSquads = $this->getElementsBySquad($projectSquads);
+        $projectGallery = $this->imageRepository->getImagesByProjectId($projectId);
 
         $projectBasicInfo['techniques'] = $projectTechniques;
         $projectBasicInfo['elements'] = $projectElements;
         $projectBasicInfo['squads'] = $projectSquads;
+        $projectBasicInfo['gallery'] = $projectGallery;
 
         return $projectBasicInfo;
     }
@@ -227,7 +229,6 @@ class ProjectService implements ProjectServiceInterface
 
     public function getUpdatesByProjectId(int $projectId): array
     {
-
         $updates = $this->elementUpdateRepository->getUpdatesByProjectId($projectId);
         $updates = $this->addImagesAndElementsToUpdates($updates);
 
@@ -245,5 +246,6 @@ class ProjectService implements ProjectServiceInterface
 
         return $updates;
     }
+
 
 }
