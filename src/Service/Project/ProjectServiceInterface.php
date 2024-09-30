@@ -11,4 +11,5 @@ interface ProjectServiceInterface
     public function addExtraUser(array $projectData): void;
     public function editProject(array $newProjectData): void;
     public function togglePriority(string $projectId, User $user): void;
+    public function getProjectInfoById(int $projectId): array;
 }

@@ -19,4 +19,18 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
         parent::__construct($registry, Project::class);
     }
 
+    public function getProjectById(int $id): ?array
+    {
+        return $this->createQueryBuilder('PROJECT')
+            ->select('PROJECT.name, PROJECT.description, BRAND.name AS brand, LEVEL.name AS level')
+            ->leftJoin('PROJECT.brand', 'BRAND')
+            ->leftJoin('PROJECT.level', 'LEVEL')
+            ->leftJoin('PROJECT.projectTechniques', 'PT')
+            ->leftJoin('PT.technique', 'TECHNIQUE')
+            ->andWhere('PROJECT.id = :id')
+            ->setParameter('id', $id)
+            ->groupBy('PROJECT.id')
+            ->getQuery()
+            ->getSingleResult();
+    }
 }

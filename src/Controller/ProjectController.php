@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Project\ProjectServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,6 +33,14 @@ class ProjectController extends AbstractController
         $projects = $userProjectsRepository->getProjectsByUser($user);
 
         return new JsonResponse($projects);
+    }
+
+    #[Route('/project/{id}', methods: ['GET'])]
+    public function getProjectById(ProjectServiceInterface $projectService, int $id): Response
+    {
+        $projectInfo = $projectService->getProjectInfoById($id);
+
+        return new JsonResponse($projectInfo);
     }
 
     #[Route('/project', methods: ['POST'])]
@@ -97,4 +106,6 @@ class ProjectController extends AbstractController
         }
         return new Response('Priority toggled correctly');
     }
+
+
 }

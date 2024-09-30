@@ -14,6 +14,7 @@ use App\Exception\EntityNotFoundException;
 use App\Repository\Brand\BrandRepositoryInterface;
 use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
+use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Technique\TechniqueRepositoryInterface;
 use App\Repository\User\UserRepositoryInterface;
@@ -33,6 +34,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly UserRepositoryInterface $userRE,
         private readonly LevelRepositoryInterface $levelRE,
         private readonly TechniqueRepositoryInterface $techniqueRE,
+        private readonly ProjectTechniqueRepositoryInterface $projectTechniqueRepository,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -186,5 +188,16 @@ class ProjectService implements ProjectServiceInterface
         $projectPriority = $userProject->isPriority();
         $userProject->setPriority(!$projectPriority);
         $this->em->persist($userProject);
+    }
+
+
+    public function getProjectInfoById(int $projectId): array
+    {
+        $projectBasicInfo = $this->projectRE->getProjectById($projectId);
+        $projectTechniques = $this->projectTechniqueRepository->projectTechniquesByProjectId($projectId);
+
+        $projectBasicInfo['techniques'] = $projectTechniques;
+
+        return $projectBasicInfo;
     }
 }
