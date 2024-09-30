@@ -66,12 +66,19 @@ class Project
     #[ORM\OneToMany(targetEntity: Element::class, mappedBy: 'project')]
     private Collection $elements;
 
+    /**
+     * @var Collection<int, Squad>
+     */
+    #[ORM\OneToMany(targetEntity: Squad::class, mappedBy: 'project')]
+    private Collection $squads;
+
     public function __construct()
     {
         $this->projectTechniques = new ArrayCollection();
         $this->reference = new ArrayCollection();
         $this->userProjects = new ArrayCollection();
         $this->elements = new ArrayCollection();
+        $this->squads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -289,6 +296,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($element->getProject() === $this) {
                 $element->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Squad>
+     */
+    public function getSquads(): Collection
+    {
+        return $this->squads;
+    }
+
+    public function addSquad(Squad $squad): static
+    {
+        if (!$this->squads->contains($squad)) {
+            $this->squads->add($squad);
+            $squad->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSquad(Squad $squad): static
+    {
+        if ($this->squads->removeElement($squad)) {
+            // set the owning side to null (unless already changed)
+            if ($squad->getProject() === $this) {
+                $squad->setProject(null);
             }
         }
 

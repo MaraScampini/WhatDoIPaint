@@ -39,6 +39,9 @@ class Element
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
+    #[ORM\ManyToOne(inversedBy: 'elements')]
+    private ?Squad $Squad = null;
+
     public function __construct()
     {
         $this->elementUpdates = new ArrayCollection();
@@ -135,6 +138,18 @@ class Element
     public function setProject(?Project $project): static
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getSquad(): ?Squad
+    {
+        return $this->Squad;
+    }
+
+    public function setSquad(?Squad $Squad): static
+    {
+        $this->Squad = $Squad;
 
         return $this;
     }
