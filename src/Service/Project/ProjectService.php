@@ -14,6 +14,7 @@ use App\Exception\EntityNotFoundException;
 use App\Repository\Brand\BrandRepositoryInterface;
 use App\Repository\Element\ElementRepositoryInterface;
 use App\Repository\ElementUpdate\ElementUpdateRepositoryInterface;
+use App\Repository\Image\ImageRepositoryInterface;
 use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
@@ -41,6 +42,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ElementRepositoryInterface $elementRepository,
         private readonly SquadRepositoryInterface $squadRepository,
         private readonly ElementUpdateRepositoryInterface $elementUpdateRepository,
+        private readonly ImageRepositoryInterface $imageRepository,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
     ) {}
@@ -225,6 +227,23 @@ class ProjectService implements ProjectServiceInterface
 
     public function getUpdatesByProjectId(int $projectId): array
     {
-        return $this->elementUpdateRepository->getUpdatesByProjectId($projectId);
+
+        $updates = $this->elementUpdateRepository->getUpdatesByProjectId($projectId);
+        $updates = $this->addImagesAndElementsToUpdates($updates);
+
+        return $updates;
     }
+
+    private function addImagesAndElementsToUpdates(array $updates): array
+    {
+        foreach($updates as &$update) {
+            $images = $this->imageRepository->getImagesByUpdateId($update['id']);
+            $elements = $this->elementUpdateRepository->getElementsAndSquadsByUpdateId($update['id']);
+            $update['images'] = $images;
+            $update['elements'] = $elements;
+        }
+
+        return $updates;
+    }
+
 }
