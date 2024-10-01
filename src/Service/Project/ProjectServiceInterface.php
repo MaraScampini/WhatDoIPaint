@@ -12,5 +12,4 @@ interface ProjectServiceInterface
     public function editProject(array $newProjectData): void;
     public function togglePriority(string $projectId, User $user): void;
     public function getProjectInfoById(int $projectId): array;
-    public function getUpdatesByProjectId(int $projectId): array;
 }
