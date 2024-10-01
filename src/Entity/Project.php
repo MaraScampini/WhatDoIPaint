@@ -78,6 +78,12 @@ class Project
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'project')]
     private Collection $images;
 
+    /**
+     * @var Collection<int, Update>
+     */
+    #[ORM\OneToMany(targetEntity: Update::class, mappedBy: 'project')]
+    private Collection $updates;
+
     public function __construct()
     {
         $this->projectTechniques = new ArrayCollection();
@@ -86,6 +92,7 @@ class Project
         $this->elements = new ArrayCollection();
         $this->squads = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->updates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -363,6 +370,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($image->getProject() === $this) {
                 $image->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Update>
+     */
+    public function getUpdates(): Collection
+    {
+        return $this->updates;
+    }
+
+    public function addUpdate(Update $update): static
+    {
+        if (!$this->updates->contains($update)) {
+            $this->updates->add($update);
+            $update->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdate(Update $update): static
+    {
+        if ($this->updates->removeElement($update)) {
+            // set the owning side to null (unless already changed)
+            if ($update->getProject() === $this) {
+                $update->setProject(null);
             }
         }
 

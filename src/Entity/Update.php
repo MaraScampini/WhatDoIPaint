@@ -44,6 +44,9 @@ class Update
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'newUpdate')]
     private Collection $images;
 
+    #[ORM\ManyToOne(inversedBy: 'updates')]
+    private ?Project $project = null;
+
     public function __construct()
     {
         $this->elementUpdates = new ArrayCollection();
@@ -171,6 +174,18 @@ class Update
                 $image->setNewUpdate(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }
