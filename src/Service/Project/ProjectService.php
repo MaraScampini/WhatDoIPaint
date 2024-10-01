@@ -21,6 +21,7 @@ use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
 use App\Repository\Squad\SquadRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Technique\TechniqueRepositoryInterface;
+use App\Repository\Update\UpdateRepositoryInterface;
 use App\Repository\User\UserRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Imgur\ImgurService;
@@ -42,6 +43,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ElementRepositoryInterface $elementRepository,
         private readonly SquadRepositoryInterface $squadRepository,
         private readonly ElementUpdateRepositoryInterface $elementUpdateRepository,
+        private readonly UpdateRepositoryInterface $updateRepository,
         private readonly ImageRepositoryInterface $imageRepository,
         private readonly EntityManagerInterface $em,
         private readonly ImgurService $imgurSE
@@ -231,7 +233,7 @@ class ProjectService implements ProjectServiceInterface
 
     private function getUpdatesByProjectId(int $projectId): array
     {
-        $updates = $this->elementUpdateRepository->getUpdatesByProjectId($projectId);
+        $updates = $this->updateRepository->getUpdatesByProjectId($projectId);
         $updates = $this->addImagesAndElementsToUpdates($updates);
 
         return $updates;

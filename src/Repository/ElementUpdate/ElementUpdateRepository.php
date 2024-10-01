@@ -19,23 +19,6 @@ class ElementUpdateRepository extends ServiceEntityRepository implements Element
         parent::__construct($registry, ElementUpdate::class);
     }
 
-    public function getUpdatesByProjectId(int $projectId): ?array
-    {
-        return $this->createQueryBuilder('UPDATE_ELEMENT')
-            ->select('NEW_UPDATE.id, NEW_UPDATE.title, NEW_UPDATE.description, NEW_UPDATE.date')
-            ->leftJoin('UPDATE_ELEMENT.element', 'ELEMENT')
-            ->leftJoin('UPDATE_ELEMENT.Squad', 'SQUAD')
-            ->leftJoin('UPDATE_ELEMENT.newUpdate', 'NEW_UPDATE')
-            ->leftJoin('ELEMENT.project', 'PROJECT_ELEMENT')
-            ->leftJoin('SQUAD.project', 'PROJECT_SQUAD')
-            ->orWhere('PROJECT_ELEMENT.id = :projectId')
-            ->orWhere('PROJECT_SQUAD.id = :projectId')
-            ->setParameter('projectId', $projectId)
-            ->groupBy('NEW_UPDATE.id')
-            ->getQuery()
-            ->getResult();
-    }
-
     public function getElementsAndSquadsByUpdateId(int $updateId): ?array
     {
         return $this->createQueryBuilder('UPDATE_ELEMENT')

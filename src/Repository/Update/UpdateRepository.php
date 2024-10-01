@@ -12,11 +12,22 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Update|null findOneBy(array $criteria, array $orderBy = null)
  * @method Update[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UpdateRepository extends ServiceEntityRepository
+class UpdateRepository extends ServiceEntityRepository implements UpdateRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Update::class);
+    }
+
+    public function getUpdatesByProjectId(int $projectId): ?array
+    {
+        return $this->createQueryBuilder('NEW_UPDATE')
+            ->select('NEW_UPDATE.id, NEW_UPDATE.title, NEW_UPDATE.description, NEW_UPDATE.date')
+            ->andWhere('NEW_UPDATE.project = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->groupBy('NEW_UPDATE.id')
+            ->getQuery()
+            ->getResult();
     }
 
 }
