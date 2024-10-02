@@ -7,5 +7,5 @@ interface ImageRepositoryInterface
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): ?array;
     public function getImagesByUpdateId(int $updateId): ?array;
-    public function getImagesByProjectId(int $projectId): ?array;
+    public function getImagesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array;
 }

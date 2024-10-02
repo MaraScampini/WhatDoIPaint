@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\Image\ImageRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
+use App\Repository\Update\UpdateRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Project\ProjectServiceInterface;
+use App\Service\Update\UpdateServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,6 +44,24 @@ class ProjectController extends AbstractController
         $projectInfo = $projectService->getProjectInfoById($id);
 
         return new JsonResponse($projectInfo);
+    }
+
+    #[Route('/project/updates/{projectId}', methods: ['GET'])]
+    public function getUpdatesByProjectId(UpdateServiceInterface $updateService, Request $request, int $projectId): Response
+    {
+        $page = $request->query->getInt('page');
+
+        $updates = $updateService->getUpdatesByProjectId($projectId, $page);
+        return new JsonResponse($updates);
+    }
+
+    #[Route('/project/gallery/{projectId}', methods: ['GET'])]
+    public function getGalleryByProjectId(ImageRepositoryInterface $imageRepository, Request $request, int $projectId): Response
+    {
+        $page = $request->query->getInt('page');
+
+        $gallery = $imageRepository->getImagesByProjectId($projectId, $page);
+        return new JsonResponse($gallery);
     }
 
     #[Route('/project', methods: ['POST'])]

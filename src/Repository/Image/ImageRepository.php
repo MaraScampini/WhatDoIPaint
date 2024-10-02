@@ -27,8 +27,10 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->getSingleColumnResult();
     }
 
-    public function getImagesByProjectId(int $projectId): ?array
+    public function getImagesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array
     {
+        $offset = ($page - 1) * $limit;
+
         return $this->createQueryBuilder('IMAGE')
             ->select('IMAGE.url')
             ->leftJoin('IMAGE.newUpdate', 'IMAGE_UPDATE')
@@ -42,6 +44,8 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->orWhere('IMAGE.project = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('IMAGE.id')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getSingleColumnResult();
     }

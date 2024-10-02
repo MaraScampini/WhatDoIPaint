@@ -25,6 +25,7 @@ use App\Repository\Update\UpdateRepositoryInterface;
 use App\Repository\User\UserRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Imgur\ImgurService;
+use App\Service\Update\UpdateServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService implements ProjectServiceInterface
@@ -42,11 +43,10 @@ class ProjectService implements ProjectServiceInterface
         private readonly ProjectTechniqueRepositoryInterface $projectTechniqueRepository,
         private readonly ElementRepositoryInterface $elementRepository,
         private readonly SquadRepositoryInterface $squadRepository,
-        private readonly ElementUpdateRepositoryInterface $elementUpdateRepository,
-        private readonly UpdateRepositoryInterface $updateRepository,
         private readonly ImageRepositoryInterface $imageRepository,
         private readonly EntityManagerInterface $em,
-        private readonly ImgurService $imgurSE
+        private readonly ImgurService $imgurSE,
+        private readonly UpdateServiceInterface $updateService
     ) {}
 
     public function createProject(array $projectData, User $user): void
@@ -190,9 +190,9 @@ class ProjectService implements ProjectServiceInterface
     /**
      * @throws EntityNotFoundException
      */
-    public function togglePriority(string $userProjectId, User $user): void
+    public function togglePriority(string $projectId, User $user): void
     {
-        $userProject = $this->userProjectsRE->find($userProjectId);
+        $userProject = $this->userProjectsRE->find($projectId);
         if(!$userProject instanceof UserProjects || $userProject->getUser() !== $user) throw new CustomMessageException('You cannot edit that project');
 
         $projectPriority = $userProject->isPriority();
@@ -209,7 +209,7 @@ class ProjectService implements ProjectServiceInterface
         $projectSquads = $this->squadRepository->getSquadsByProjectId($projectId);
         $projectSquads = $this->getElementsBySquad($projectSquads);
         $projectGallery = $this->imageRepository->getImagesByProjectId($projectId);
-        $projectUpdates = $this->getUpdatesByProjectId($projectId);
+        $projectUpdates = $this->updateService->getUpdatesByProjectId($projectId);
 
         $projectBasicInfo['techniques'] = $projectTechniques;
         $projectBasicInfo['elements'] = $projectElements;
@@ -231,25 +231,7 @@ class ProjectService implements ProjectServiceInterface
         return $squads;
     }
 
-    private function getUpdatesByProjectId(int $projectId): array
-    {
-        $updates = $this->updateRepository->getUpdatesByProjectId($projectId);
-        $updates = $this->addImagesAndElementsToUpdates($updates);
 
-        return $updates;
-    }
-
-    private function addImagesAndElementsToUpdates(array $updates): array
-    {
-        foreach($updates as &$update) {
-            $images = $this->imageRepository->getImagesByUpdateId($update['id']);
-            $elements = $this->elementUpdateRepository->getElementsAndSquadsByUpdateId($update['id']);
-            $update['images'] = $images;
-            $update['elements'] = $elements;
-        }
-
-        return $updates;
-    }
 
 
 }

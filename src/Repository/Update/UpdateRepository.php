@@ -19,13 +19,17 @@ class UpdateRepository extends ServiceEntityRepository implements UpdateReposito
         parent::__construct($registry, Update::class);
     }
 
-    public function getUpdatesByProjectId(int $projectId): ?array
+    public function getUpdatesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array
     {
+        $offset = ($page - 1) * $limit;
+
         return $this->createQueryBuilder('NEW_UPDATE')
             ->select('NEW_UPDATE.id, NEW_UPDATE.title, NEW_UPDATE.description, NEW_UPDATE.date')
             ->andWhere('NEW_UPDATE.project = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('NEW_UPDATE.id')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
