@@ -20,6 +20,15 @@ class UpdateService implements UpdateServiceInterface
         return $this->addImagesAndElementsToUpdates($updates);
     }
 
+    public function getUpdateInformation(int $updateId): array
+    {
+        $update = $this->updateRepository->getUpdateInformation($updateId);
+        $update['images'] = $this->imageRepository->getImagesByUpdateId($updateId);
+
+        return $update;
+
+    }
+
     private function addImagesAndElementsToUpdates(array $updates): array
     {
         foreach($updates as &$update) {

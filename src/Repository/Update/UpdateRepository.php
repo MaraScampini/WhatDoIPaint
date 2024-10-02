@@ -34,4 +34,14 @@ class UpdateRepository extends ServiceEntityRepository implements UpdateReposito
             ->getResult();
     }
 
+    public function getUpdateInformation(int $updateId): ?array
+    {
+        return $this->createQueryBuilder('NEW_UPDATE')
+            ->select('NEW_UPDATE.id, NEW_UPDATE.title, NEW_UPDATE.date, NEW_UPDATE.description')
+            ->andWhere('NEW_UPDATE.id = :updateId')
+            ->setParameter('updateId', $updateId)
+            ->getQuery()
+            ->getSingleResult();
+    }
+
 }

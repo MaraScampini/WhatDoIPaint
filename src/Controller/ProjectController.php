@@ -6,8 +6,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\Image\ImageRepositoryInterface;
-use App\Repository\Project\ProjectRepositoryInterface;
-use App\Repository\Update\UpdateRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Project\ProjectServiceInterface;
 use App\Service\Update\UpdateServiceInterface;
