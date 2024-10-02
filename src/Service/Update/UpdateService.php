@@ -24,6 +24,7 @@ class UpdateService implements UpdateServiceInterface
     {
         $update = $this->updateRepository->getUpdateInformation($updateId);
         $update['images'] = $this->imageRepository->getImagesByUpdateId($updateId);
+        $update['elements'] = $this->elementUpdateRepository->getElementsAndSquadsByUpdateId($updateId);
 
         return $update;
 
