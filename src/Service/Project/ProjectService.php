@@ -3,6 +3,7 @@
 namespace App\Service\Project;
 
 use App\Entity\Brand;
+use App\Entity\Image;
 use App\Entity\Level;
 use App\Entity\Project;
 use App\Entity\ProjectTechnique;
@@ -67,7 +68,11 @@ class ProjectService implements ProjectServiceInterface
 
         if(isset($projectData['image']) && $projectData['image'] !== "") {
             $imageURL = $this->imgurSE->uploadImage($projectData['image']);
-            $project->setImage($imageURL);
+            $image = new Image();
+            $image->setUrl($imageURL);
+            $image->setProject($project);
+            $image->setTitle($projectData['name']);
+            $this->em->persist($image);
         }
 
         if(isset($projectData['description']) && $projectData['description'] !== "") $project->setDescription($projectData['description']);
