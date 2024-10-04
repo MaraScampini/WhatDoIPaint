@@ -3,10 +3,12 @@
 namespace App\Service\Project;
 
 use App\Entity\Brand;
+use App\Entity\Element;
 use App\Entity\Image;
 use App\Entity\Level;
 use App\Entity\Project;
 use App\Entity\ProjectTechnique;
+use App\Entity\Squad;
 use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\UserProjects;
@@ -236,7 +238,43 @@ class ProjectService implements ProjectServiceInterface
         return $squads;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function addElementsToProject(array $elementsData): void
+    {
+        $projectId = $elementsData['projectId'];
+        $project = $this->projectRE->find($projectId);
+        if(!$project instanceof Project) throw new EntityNotFoundException('project');
+        $elementsToAdd = $elementsData['elements'];
 
+        foreach($elementsToAdd as $newElement) {
+            $status = $this->statusRE->find($newElement['status']);
+            if($newElement['amount'] > 1) {
+                $squad = new Squad();
+                $squad->setProject($project);
+                $squad->setLastUpdate(new \DateTime());
+                $squad->setName($newElement['name']);
+                $this->em->persist($squad);
+                for ($i = 1; $i <= $newElement['amount']; $i++) {
+                    $element = new Element();
+                    $element->setProject($project);
+                    $element->setStatus($status);
+                    $element->setName($newElement['name'] . ' ' . $i);
+                    $element->setLastUpdate(new \DateTime());
+                    $element->setSquad($squad);
+                    $this->em->persist($element);
+                }
+            } else {
+                $element = new Element();
+                $element->setProject($project);
+                $element->setStatus($status);
+                $element->setName($newElement['name']);
+                $element->setLastUpdate(new \DateTime());
+                $this->em->persist($element);
+            }
+        }
+    }
 
 
 }
