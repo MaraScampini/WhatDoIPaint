@@ -27,7 +27,7 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->getSingleColumnResult();
     }
 
-    public function getImagesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array
+    public function getImagesByProjectId(int $projectId, int $page = 1, int $limit = 6): ?array
     {
         $offset = ($page - 1) * $limit;
 
