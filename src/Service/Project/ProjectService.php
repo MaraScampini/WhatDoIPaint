@@ -194,6 +194,7 @@ class ProjectService implements ProjectServiceInterface
             }
             $image = new Image();
             $image->setProject($project);
+            $image->setUrl($imageURL);
             $this->em->persist($image);
         }
 
