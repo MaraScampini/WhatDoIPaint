@@ -258,34 +258,43 @@ class ProjectService implements ProjectServiceInterface
         $projectId = $elementsData['projectId'];
         $project = $this->projectRE->find($projectId);
         if (!$project instanceof Project) throw new EntityNotFoundException('project');
+        $statusMap = [
+            'sprue' => $this->statusRE->find(1),
+            'assembled' => $this->statusRE->find(2),
+            'halfPainted' => $this->statusRE->find(3),
+            'base' => $this->statusRE->find(4),
+            'finished' => $this->statusRE->find(5),
+        ];
+
         $statuses = $elementsData['statuses'];
 
-        foreach ($statuses as $status) {
-            $statusEntity = $this->statusRE->find($status['id']);
-            $elementsToAdd = $status['elements'];
-            foreach ($elementsToAdd as $newElement) {
-                if ($newElement['amount'] > 1) {
-                    $squad = new Squad();
-                    $squad->setProject($project);
-                    $squad->setLastUpdate(new \DateTime());
-                    $squad->setName($newElement['name']);
-                    $this->em->persist($squad);
-                    for ($i = 1; $i <= $newElement['amount']; $i++) {
+        foreach ($statusMap as $statusKey => $statusEntity) {
+            if (isset($statuses[$statusKey]) && count($statuses[$statusKey]) > 0) {
+                $elementsToAdd = $statuses[$statusKey];
+                foreach ($elementsToAdd as $newElement) {
+                    if ($newElement['amount'] > 1) {
+                        $squad = new Squad();
+                        $squad->setProject($project);
+                        $squad->setLastUpdate(new \DateTime());
+                        $squad->setName($newElement['name']);
+                        $this->em->persist($squad);
+                        for ($i = 1; $i <= $newElement['amount']; $i++) {
+                            $element = new Element();
+                            $element->setProject($project);
+                            $element->setStatus($statusEntity);
+                            $element->setName($newElement['name'] . ' ' . $i);
+                            $element->setLastUpdate(new \DateTime());
+                            $element->setSquad($squad);
+                            $this->em->persist($element);
+                        }
+                    } else {
                         $element = new Element();
                         $element->setProject($project);
                         $element->setStatus($statusEntity);
-                        $element->setName($newElement['name'] . ' ' . $i);
+                        $element->setName($newElement['name']);
                         $element->setLastUpdate(new \DateTime());
-                        $element->setSquad($squad);
                         $this->em->persist($element);
                     }
-                } else {
-                    $element = new Element();
-                    $element->setProject($project);
-                    $element->setStatus($statusEntity);
-                    $element->setName($newElement['name']);
-                    $element->setLastUpdate(new \DateTime());
-                    $this->em->persist($element);
                 }
             }
         }
