@@ -188,7 +188,13 @@ class ProjectService implements ProjectServiceInterface
 
         if(isset($newProjectData['image'])) {
             $imageURL = $this->imgurSE->uploadImage($newProjectData['image']);
-            $project->setImage($imageURL);
+            if($imageURL) {
+                $previousImage = $this->imageRepository->findOneBy(['project' => $project]);
+                if($previousImage instanceof Image) $this->em->remove($previousImage);
+            }
+            $image = new Image();
+            $image->setProject($project);
+            $this->em->persist($image);
         }
 
         $this->em->persist($project);
