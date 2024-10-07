@@ -41,11 +41,20 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->leftJoin('SQUAD.project', 'SQUAD_PROJECT')
             ->orWhere('ELEMENT_PROJECT.id = :projectId')
             ->orWhere('SQUAD_PROJECT.id = :projectId')
-            ->orWhere('IMAGE.project = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('IMAGE.id')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    public function getProjectCoverImage(int $projectId): array
+    {
+        return $this->createQueryBuilder('IMAGE')
+            ->select('IMAGE.url')
+            ->andWhere('IMAGE.project = :projectId')
+            ->setParameter('projectId', $projectId)
             ->getQuery()
             ->getSingleColumnResult();
     }
