@@ -259,11 +259,14 @@ class ProjectService implements ProjectServiceInterface
         $project = $this->projectRE->find($projectId);
         if (!$project instanceof Project) throw new EntityNotFoundException('project');
         $statusMap = [
-            'sprue' => $this->statusRE->find(1),
-            'assembled' => $this->statusRE->find(2),
-            'halfPainted' => $this->statusRE->find(3),
-            'base' => $this->statusRE->find(4),
-            'finished' => $this->statusRE->find(5),
+            'box' => $this->statusRE->find(1),
+            'sprue' => $this->statusRE->find(2),
+            'printed' => $this->statusRE->find(3),
+            'assembled' => $this->statusRE->find(4),
+            'primed' => $this->statusRE->findOneBy(5),
+            'halfPainted' => $this->statusRE->find(6),
+            'painted' => $this->statusRE->find(7),
+            'finished' => $this->statusRE->find(8),
         ];
 
         $statuses = $elementsData['statuses'];
