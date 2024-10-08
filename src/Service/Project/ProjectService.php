@@ -287,7 +287,7 @@ class ProjectService implements ProjectServiceInterface
                             $element->setSquad($squad);
                             $this->em->persist($element);
                         }
-                    } else if ($newElement['amount'] === 1) {
+                    } else if ($newElement['amount'] == 1) {
                         $element = new Element();
                         $element->setProject($project);
                         $element->setStatus($statusEntity);
