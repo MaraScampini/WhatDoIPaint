@@ -7,4 +7,6 @@ interface UpdateServiceInterface
     public function getUpdatesByProjectId(int $projectId): array;
     public function getUpdateInformation(int $updateId): array;
 
+    public function createShortUpdate(int $projectId): void;
+
 }
