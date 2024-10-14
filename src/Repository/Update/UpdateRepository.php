@@ -30,6 +30,7 @@ class UpdateRepository extends ServiceEntityRepository implements UpdateReposito
             ->groupBy('NEW_UPDATE.id')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->orderBy('NEW_UPDATE.date', 'DESC')
             ->getQuery()
             ->getResult();
     }
