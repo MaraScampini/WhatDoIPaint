@@ -28,4 +28,21 @@ class SquadRepository extends ServiceEntityRepository implements SquadRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function squadsByProjectIdSelector(int $projectId): ?array
+    {
+        $squads = $this->createQueryBuilder('SQUAD')
+            ->select('SQUAD.id, SQUAD.name')
+            ->leftJoin('SQUAD.project', 'PROJECT')
+            ->andWhere('PROJECT.id = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->groupBy('SQUAD.id')
+            ->getQuery()
+            ->getResult();
+
+        return array_map(function($squad) {
+            $squad['type'] = 'squad';
+            return $squad;
+        }, $squads);
+    }
 }

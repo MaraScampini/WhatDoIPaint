@@ -13,4 +13,6 @@ interface ProjectServiceInterface
     public function togglePriority(string $projectId, User $user): void;
     public function getProjectInfoById(int $projectId): array;
     public function addElementsToProject(array $elementsData): void;
+    public function getElementsAndSquadsByProjectId(int $projectId): array;
+
 }

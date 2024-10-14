@@ -250,6 +250,13 @@ class ProjectService implements ProjectServiceInterface
         return $squads;
     }
 
+    public function getElementsAndSquadsByProjectId(int $projectId): array
+    {
+        $elements = $this->elementRepository->elementsByProjectIdSelector($projectId);
+        $squads = $this->squadRepository->squadsByProjectIdSelector($projectId);
+        return array_merge($elements, $squads);
+    }
+
     /**
      * @throws EntityNotFoundException
      */

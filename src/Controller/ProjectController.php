@@ -62,6 +62,13 @@ class ProjectController extends AbstractController
         return new JsonResponse($gallery);
     }
 
+    #[Route('/project/elements/{projectId}', methods: ['GET'])]
+    public function getElementsAndSquadsByProjectId(ProjectServiceInterface $projectService, int $projectId): Response
+    {
+        $elementsAndSquads = $projectService->getElementsAndSquadsByProjectId($projectId);
+        return new JsonResponse($elementsAndSquads);
+    }
+
     #[Route('/project', methods: ['POST'])]
     public function createProject(Request $request, ProjectServiceInterface $projectSE): Response
     {

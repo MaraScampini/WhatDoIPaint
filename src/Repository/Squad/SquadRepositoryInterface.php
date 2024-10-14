@@ -9,4 +9,5 @@ interface SquadRepositoryInterface
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): ?array;
 
     public function getSquadsByProjectId(int $projectId): ?array;
+    public function squadsByProjectIdSelector(int $projectId): ?array;
 }

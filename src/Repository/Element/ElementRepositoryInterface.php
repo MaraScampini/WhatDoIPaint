@@ -11,4 +11,6 @@ interface ElementRepositoryInterface
     public function getElementsByProjectId(int $projectId): ?array;
     public function getElementsBySquad(int $squadId): ?array;
 
+    public function elementsByProjectIdSelector(int $projectId): ?array;
+
 }
