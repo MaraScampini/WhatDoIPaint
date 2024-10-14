@@ -24,12 +24,16 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
     {
         return $this->createQueryBuilder('USER_PROJECTS')
             ->select('
-            PROJECT.id, PROJECT.name, IMAGE.url AS image, USER_PROJECTS.id AS userProjectId, USER_PROJECTS.priority')
+            PROJECT.id, PROJECT.name, MAX(IMAGE.url) AS image, USER_PROJECTS.id AS userProjectId, USER_PROJECTS.priority, CASE WHEN COUNT(PROJECT_UPDATE.id) > 0 THEN true ELSE false END AS updatedToday')
             ->leftJoin('USER_PROJECTS.project', 'PROJECT')
             ->leftJoin('PROJECT.images', 'IMAGE')
+            ->leftJoin('PROJECT.updates', 'PROJECT_UPDATE', 'WITH', 'PROJECT_UPDATE.project = PROJECT AND PROJECT_UPDATE.date > :sod AND PROJECT_UPDATE.date < :eod')
+            ->setParameter('sod', (new \DateTime())->setTime(0, 0, 0))
+            ->setParameter('eod', (new \DateTime())->setTime(23, 59, 59))
             ->andWhere('USER_PROJECTS.user = :user')
             ->setParameter('user', $user)
             ->orderBy('PROJECT.lastUpdate')
+            ->groupBy('PROJECT.id, USER_PROJECTS.id')
             ->getQuery()
             ->getResult();
     }
