@@ -41,6 +41,7 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->leftJoin('SQUAD.project', 'SQUAD_PROJECT')
             ->orWhere('ELEMENT_PROJECT.id = :projectId')
             ->orWhere('SQUAD_PROJECT.id = :projectId')
+            ->orWhere('IMAGE_UPDATE.project = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('IMAGE.id')
             ->setFirstResult($offset)
