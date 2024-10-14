@@ -32,7 +32,7 @@ class SquadRepository extends ServiceEntityRepository implements SquadRepository
     public function squadsByProjectIdSelector(int $projectId): ?array
     {
         return $this->createQueryBuilder('SQUAD')
-            ->select('SQUAD.id, SQUAD.name as label')
+            ->select('SQUAD.id, SQUAD.id AS value, SQUAD.name as label')
             ->leftJoin('SQUAD.project', 'PROJECT')
             ->andWhere('PROJECT.id = :projectId')
             ->setParameter('projectId', $projectId)
