@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api')]
@@ -34,10 +35,25 @@ class UpdateController extends AbstractController
         try {
             $this->em->flush();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return new Response('The update could not be saved', 500);
         }
 
+        return new Response('Update created successfully', 200);
+    }
+
+    #[Route('/update', methods: ['POST'])]
+    public function createUpdate(UpdateServiceInterface $updateService, Request $request)
+    {
+        $updateData = json_decode($request->getContent(), true);
+
+        $updateService->createUpdate($updateData);
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return new Response('Update could not be saved', 500);
+        }
         return new Response('Update created successfully', 200);
     }
 }
