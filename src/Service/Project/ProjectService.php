@@ -250,11 +250,14 @@ class ProjectService implements ProjectServiceInterface
         return $squads;
     }
 
-    public function getElementsAndSquadsByProjectId(int $projectId): array
+    public function getElementsByProjectId(int $projectId): array
     {
-        $elements = $this->elementRepository->elementsByProjectIdSelector($projectId);
-        $squads = $this->squadRepository->squadsByProjectIdSelector($projectId);
-        return array_merge($elements, $squads);
+        return $this->elementRepository->elementsByProjectIdSelector($projectId);
+    }
+
+    public function getSquadsByProjectId(int $projectId): array
+    {
+        return $this->squadRepository->squadsByProjectIdSelector($projectId);
     }
 
     /**

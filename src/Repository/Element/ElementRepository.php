@@ -35,19 +35,14 @@ class ElementRepository extends ServiceEntityRepository implements ElementReposi
 
     public function elementsByProjectIdSelector(int $projectId): ?array
     {
-        $elements = $this->createQueryBuilder('ELEMENT')
-        ->select('ELEMENT.id, ELEMENT.label')
-        ->leftJoin('ELEMENT.project', 'PROJECT')
-        ->andWhere('PROJECT.id = :projectId')
-        ->setParameter('projectId', $projectId)
-        ->andWhere('ELEMENT.Squad IS NULL')
-        ->getQuery()
-        ->getResult();
-
-        return array_map(function($element) {
-            $element['type'] = 'element';
-            return $element;
-        }, $elements);
+        return $this->createQueryBuilder('ELEMENT')
+            ->select('ELEMENT.id, ELEMENT.name as label')
+            ->leftJoin('ELEMENT.project', 'PROJECT')
+            ->andWhere('PROJECT.id = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->andWhere('ELEMENT.Squad IS NULL')
+            ->getQuery()
+            ->getResult();
     }
 
     public function getElementsBySquad(int $squadId): ?array
