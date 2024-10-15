@@ -312,11 +312,4 @@ class ProjectService implements ProjectServiceInterface
             }
         }
     }
-
-    public function getRandomProject(array $params, User $user): array
-    {
-        return $this->projectRE->getRandomProject($params, $user);
-    }
-
-
 }

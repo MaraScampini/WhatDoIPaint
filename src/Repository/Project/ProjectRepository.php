@@ -63,8 +63,4 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
 
         return $projectQuery->orderBy('RAND()')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
-
-
-
-
 }
