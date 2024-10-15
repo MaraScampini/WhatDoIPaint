@@ -3,6 +3,7 @@
 namespace App\Repository\Project;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,6 +33,35 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
             ->groupBy('PROJECT.id')
             ->getQuery()
             ->getSingleResult();
+    }
+
+    public function getRandomProject(array $filters, User $user): ?array
+    {
+        $projectQuery = $this->createQueryBuilder('PROJECT')
+            ->select('PROJECT.id, PROJECT.name, PROJECT.lastUpdate')
+            ->leftJoin('PROJECT.userProjects', 'USER_PROJECT', 'WITH', 'USER_PROJECT.project = PROJECT.id')
+            ->andWhere('USER_PROJECT.user = :user')
+            ->setParameter('user', $user);
+
+        if(isset($filters['level'])) {
+            $levelFilter = $filters['level'];
+            $projectQuery->andWhere('PROJECT.level = :level')
+                ->setParameter('level', $levelFilter);
+        }
+
+        if(isset($filters['status'])) {
+            $statusFilter = $filters['status'];
+            $projectQuery->andWhere('PROJECT.status = :status')
+                ->setParameter('status', $statusFilter);
+        }
+
+        if(isset($filters['priority'])) {
+            $priorityFilter = $filters['priority'];
+            $projectQuery->andWhere('USER_PROJECT.priority = :priority')
+                ->setParameter('priority', $priorityFilter);
+        }
+
+        return $projectQuery->orderBy('RAND()')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 
 

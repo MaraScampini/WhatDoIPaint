@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\Image\ImageRepositoryInterface;
+use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\UserProjects\UserProjectsRepositoryInterface;
 use App\Service\Project\ProjectServiceInterface;
 use App\Service\Update\UpdateServiceInterface;
@@ -34,14 +35,6 @@ class ProjectController extends AbstractController
         $projects = $userProjectsRepository->getProjectsByUser($user);
 
         return new JsonResponse($projects);
-    }
-
-    #[Route('/project/{id}', methods: ['GET'])]
-    public function getProjectById(ProjectServiceInterface $projectService, int $id): Response
-    {
-        $projectInfo = $projectService->getProjectInfoById($id);
-
-        return new JsonResponse($projectInfo);
     }
 
     #[Route('/project/updates/{projectId}', methods: ['GET'])]
@@ -74,6 +67,26 @@ class ProjectController extends AbstractController
     {
         $elementsAndSquads = $projectService->getSquadsByProjectId($projectId);
         return new JsonResponse($elementsAndSquads);
+    }
+
+    #[Route('/project/wdip', methods: ['GET'])]
+    public function getRandomProject(ProjectRepositoryInterface $projectRepository, Request $request): Response
+    {
+        $queryParams = $request->query->all();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $project = $projectRepository->getRandomProject($queryParams, $user);
+
+        return new JsonResponse($project);
+    }
+
+    #[Route('/project/{id}', methods: ['GET'])]
+    public function getProjectById(ProjectServiceInterface $projectService, int $id): Response
+    {
+        $projectInfo = $projectService->getProjectInfoById($id);
+
+        return new JsonResponse($projectInfo);
     }
 
     #[Route('/project', methods: ['POST'])]
