@@ -33,13 +33,13 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
             ->andWhere('USER_PROJECTS.user = :user')
             ->setParameter('user', $user);
 
-        if(isset($params['level'])) {
+        if(isset($params['level']) && $params['level'] !== 0) {
             $levelFilter = $params['level'];
             $baseQuery->andWhere('PROJECT.level = :level')
                 ->setParameter('level', $levelFilter);
         }
 
-        if(isset($params['technique'])) {
+        if(isset($params['technique']) && $params['technique'] !== 0) {
             $techniqueFilter = $params['technique'];
             $baseQuery->leftJoin('PROJECT.projectTechniques', 'PROJECT_TECHNIQUES')
                 ->andWhere('PROJECT_TECHNIQUES.technique = :technique')
