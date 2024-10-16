@@ -27,12 +27,13 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/project', methods: ['GET'])]
-    public function getUserProjects(UserProjectsRepositoryInterface $userProjectsRepository): Response
+    public function getUserProjects(UserProjectsRepositoryInterface $userProjectsRepository, Request $request): Response
     {
+        $params = $request->query->all();
         /** @var User $user */
         $user = $this->getUser();
 
-        $projects = $userProjectsRepository->getProjectsByUser($user);
+        $projects = $userProjectsRepository->getProjectsByUser($user, $params);
 
         return new JsonResponse($projects);
     }

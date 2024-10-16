@@ -10,5 +10,5 @@ interface UserProjectsRepositoryInterface
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): ?array;
 
-    public function getProjectsByUser(User $user): ?array;
+    public function getProjectsByUser(User $user, array $params): ?array;
 }

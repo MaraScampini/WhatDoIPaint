@@ -20,9 +20,9 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
         parent::__construct($registry, UserProjects::class);
     }
 
-    public function getProjectsByUser(User $user): ?array
+    public function getProjectsByUser(User $user, array $params): ?array
     {
-        return $this->createQueryBuilder('USER_PROJECTS')
+        $baseQuery = $this->createQueryBuilder('USER_PROJECTS')
             ->select('
             PROJECT.id, PROJECT.name, MAX(IMAGE.url) AS image, USER_PROJECTS.id AS userProjectId, USER_PROJECTS.priority, CASE WHEN COUNT(PROJECT_UPDATE.id) > 0 THEN true ELSE false END AS updatedToday')
             ->leftJoin('USER_PROJECTS.project', 'PROJECT')
@@ -31,11 +31,32 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
             ->setParameter('sod', (new \DateTime())->setTime(0, 0, 0))
             ->setParameter('eod', (new \DateTime())->setTime(23, 59, 59))
             ->andWhere('USER_PROJECTS.user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('PROJECT.lastUpdate')
+            ->setParameter('user', $user);
+
+        if(isset($params['level'])) {
+            $levelFilter = $params['level'];
+            $baseQuery->andWhere('PROJECT.level = :level')
+                ->setParameter('level', $levelFilter);
+        }
+
+        if(isset($params['technique'])) {
+            $techniqueFilter = $params['technique'];
+            $baseQuery->leftJoin('PROJECT.projectTechniques', 'PROJECT_TECHNIQUES')
+                ->andWhere('PROJECT_TECHNIQUES.technique = :technique')
+                ->setParameter('technique', $techniqueFilter);
+        }
+
+        if(isset($params['search'])) {
+            $search = $params['search'];
+            $baseQuery->andWhere('PROJECT.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $baseQuery->orderBy('PROJECT.lastUpdate')
             ->groupBy('PROJECT.id, USER_PROJECTS.id')
             ->getQuery()
             ->getResult();
+
     }
 
 }
