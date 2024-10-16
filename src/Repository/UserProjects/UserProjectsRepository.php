@@ -56,7 +56,12 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
                 ->setParameter('search', '%' . $search . '%');
         }
 
-        return $baseQuery
+        $countQuery = clone($baseQuery);
+        $total = $countQuery->select('COUNT(PROJECT.id) as total')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $data = $baseQuery
             ->orderBy('USER_PROJECTS.priority', 'DESC')
             ->addOrderBy('PROJECT.lastUpdate', 'DESC')
             ->groupBy('PROJECT.id, USER_PROJECTS.id')
@@ -64,6 +69,11 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+
+        return [
+            'total' => $total,
+            'data' => $data
+        ];
 
     }
 
