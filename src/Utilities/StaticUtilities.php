@@ -76,15 +76,15 @@ class StaticUtilities
     public static function getStatusSelector(): array
     {
         return [
-            ['id' => self::$STATUS_BOX, 'name' => 'Box'],
-            ['id' => self::$STATUS_SPRUE, 'name' => 'Sprue'],
-            ['id' => self::$STATUS_PRINTED, 'name' => 'Printed'],
-            ['id' => self::$STATUS_ASSEMBLED, 'name' => 'Assembled'],
-            ['id' => self::$STATUS_PRIMED, 'name' => 'Primed'],
-            ['id' => self::$STATUS_HALF_PAINTED, 'name' => 'Half painted'],
-            ['id' => self::$STATUS_ON_HOLD, 'name' => 'On hold'],
-            ['id' => self::$STATUS_PAINTED, 'name' => 'Painted'],
-            ['id' => self::$STATUS_FINISHED, 'name' => 'Finished'],
+            ['id' => self::$STATUS_BOX, 'label' => 'Box'],
+            ['id' => self::$STATUS_SPRUE, 'label' => 'Sprue'],
+            ['id' => self::$STATUS_PRINTED, 'label' => 'Printed'],
+            ['id' => self::$STATUS_ASSEMBLED, 'label' => 'Assembled'],
+            ['id' => self::$STATUS_PRIMED, 'label' => 'Primed'],
+            ['id' => self::$STATUS_HALF_PAINTED, 'label' => 'Half painted'],
+            ['id' => self::$STATUS_ON_HOLD, 'label' => 'On hold'],
+            ['id' => self::$STATUS_PAINTED, 'label' => 'Painted'],
+            ['id' => self::$STATUS_FINISHED, 'label' => 'Finished'],
         ];
     }
 
