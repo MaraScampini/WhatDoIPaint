@@ -68,14 +68,13 @@ class UpdateService implements UpdateServiceInterface
         $update->setProject($project);
         $update->setDate(new \DateTime());
         $update->setLastUpdate(new \DateTime());
+        $project->setLastUpdate(new \DateTime());
         $this->em->persist($update);
         return $update;
     }
 
     public function createUpdate(array $request): void
     {
-        $today = new \DateTime();
-        $today = $today->format('d/m/Y');
         $projectId = $request['projectId'];
         $newUpdate = $this->createShortUpdate($projectId);
 

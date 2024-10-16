@@ -52,7 +52,9 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
                 ->setParameter('search', '%' . $search . '%');
         }
 
-        return $baseQuery->orderBy('PROJECT.lastUpdate')
+        return $baseQuery
+            ->orderBy('USER_PROJECTS.priority', 'DESC')
+            ->addOrderBy('PROJECT.lastUpdate', 'DESC')
             ->groupBy('PROJECT.id, USER_PROJECTS.id')
             ->getQuery()
             ->getResult();

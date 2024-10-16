@@ -133,7 +133,6 @@ class ProjectController extends AbstractController
         try {
             $this->em->flush();
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             return new Response('Project could not be edited', 500);
         }
 

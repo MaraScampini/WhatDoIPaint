@@ -42,7 +42,7 @@ class UpdateController extends AbstractController
     }
 
     #[Route('/update', methods: ['POST'])]
-    public function createUpdate(UpdateServiceInterface $updateService, Request $request)
+    public function createUpdate(UpdateServiceInterface $updateService, Request $request): Response
     {
         $updateData = json_decode($request->getContent(), true);
 
@@ -51,7 +51,6 @@ class UpdateController extends AbstractController
         try {
             $this->em->flush();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return new Response('Update could not be saved', 500);
         }
         return new Response('Update created successfully', 200);
