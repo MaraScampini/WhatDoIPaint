@@ -55,6 +55,14 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
                 ->setParameter('status', $statusFilter);
         }
 
+        if(isset($filters['technique'])) {
+            $techniqueFilter = $filters['technique'];
+            $projectQuery
+                ->leftJoin('PROJECT.projectTechniques', 'PROJECT_TECHNIQUES', 'WITH', 'PROJECT_TECHNIQUES.project = PROJECT.id')
+                ->andWhere('PROJECT_TECHNIQUES.technique = :technique')
+                ->setParameter('technique', $techniqueFilter);
+        }
+
         if(isset($filters['priority'])) {
             $priorityFilter = $filters['priority'];
             $projectQuery->andWhere('USER_PROJECT.priority = :priority')
