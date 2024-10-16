@@ -69,6 +69,13 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
                 ->setParameter('priority', $priorityFilter);
         }
 
+        if(isset($filters['banned'])) {
+
+            $bannedFilter = explode(',', $filters['banned']);
+            $projectQuery->andWhere('PROJECT.id NOT IN (:banned)')
+                ->setParameter('banned', $bannedFilter);
+        }
+
         return $projectQuery->orderBy('RAND()')->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 }

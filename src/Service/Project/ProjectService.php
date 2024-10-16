@@ -185,10 +185,6 @@ class ProjectService implements ProjectServiceInterface
             $project->setDescription($newProjectData['description']);
         }
 
-        if (isset($newProjectData['isPriority'])) {
-            $project->setPriority($newProjectData['isPriority']);
-        }
-
         if (isset($newProjectData['image'])) {
             $imageURL = $this->imgurSE->uploadImage($newProjectData['image']);
             if ($imageURL) {
