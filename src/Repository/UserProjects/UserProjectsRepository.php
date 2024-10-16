@@ -22,6 +22,10 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
 
     public function getProjectsByUser(User $user, array $params): ?array
     {
+        $page = $params['page'] ?? 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
         $baseQuery = $this->createQueryBuilder('USER_PROJECTS')
             ->select('
             PROJECT.id, PROJECT.name, MAX(IMAGE.url) AS image, USER_PROJECTS.id AS userProjectId, USER_PROJECTS.priority, CASE WHEN COUNT(PROJECT_UPDATE.id) > 0 THEN true ELSE false END AS updatedToday')
@@ -56,6 +60,8 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
             ->orderBy('USER_PROJECTS.priority', 'DESC')
             ->addOrderBy('PROJECT.lastUpdate', 'DESC')
             ->groupBy('PROJECT.id, USER_PROJECTS.id')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
 
