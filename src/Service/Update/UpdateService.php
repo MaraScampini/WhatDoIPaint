@@ -42,7 +42,9 @@ class UpdateService implements UpdateServiceInterface
     public function getPaginatedUpdatesByProjectId(int $projectId, int $page, int $limit): ?array
     {
         $updates = $this->updateRepository->getUpdatesByProjectId($projectId, $page, $limit);
-        return $this->addImagesAndElementsToUpdates($updates, true);
+        $updates['data'] = $this->addImagesAndElementsToUpdates($updates, true);
+
+        return $updates;
     }
 
     public function getUpdateInformation(int $updateId): array
@@ -57,7 +59,6 @@ class UpdateService implements UpdateServiceInterface
 
     private function addImagesAndElementsToUpdates(array $updates, bool $isPaginated = false): array
     {
-
         if ($isPaginated) {
             $updateData = $updates['data'];
         } else {
@@ -71,7 +72,7 @@ class UpdateService implements UpdateServiceInterface
             $update['elements'] = $elements;
         }
 
-        return $updates;
+        return $updateData;
     }
 
     public function createShortUpdate(int $projectId): Update
