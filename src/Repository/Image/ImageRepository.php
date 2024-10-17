@@ -32,7 +32,7 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
         $offset = ($page - 1) * $limit;
 
         $galleryQuery = $this->createQueryBuilder('IMAGE')
-            ->select('IMAGE.url')
+            ->select('IMAGE.url, IMAGE_UPDATE.date, IMAGE_UPDATE.id AS updateId')
             ->leftJoin('IMAGE.newUpdate', 'IMAGE_UPDATE')
             ->leftJoin('IMAGE_UPDATE.elementUpdates', 'ELEMENT_UPDATES')
             ->leftJoin('ELEMENT_UPDATES.element', 'ELEMENT')
@@ -54,7 +54,7 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
-            ->getSingleColumnResult();
+            ->getResult();
 
         return [
             'total' => $total,
