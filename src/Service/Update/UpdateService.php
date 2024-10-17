@@ -44,6 +44,15 @@ class UpdateService implements UpdateServiceInterface
         $updates = $this->updateRepository->getUpdatesByProjectId($projectId, $page, $limit);
         $updates['data'] = $this->addImagesAndElementsToUpdates($updates, true);
 
+        $updates['data'] = array_map(function($update) {
+            if($update['date'] instanceof \DateTime) {
+                $update['date'] = $update['date']->format('d/m/Y');
+            } else {
+                $update['date'] = (new \DateTime($update['date']))->format('d/m/Y');
+            }
+            return $update;
+        }, $updates['data']);
+
         return $updates;
     }
 
