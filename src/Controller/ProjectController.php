@@ -48,12 +48,12 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/project/gallery/{projectId}', methods: ['GET'])]
-    public function getGalleryByProjectId(ImageRepositoryInterface $imageRepository, Request $request, int $projectId): Response
+    public function getGalleryByProjectId(ProjectServiceInterface $projectService, Request $request, int $projectId): Response
     {
         $page = $request->query->getInt('page');
         $limit = $request->query->getInt('limit');
 
-        $gallery = $imageRepository->getImagesByProjectId($projectId, $page, $limit);
+        $gallery = $projectService->getProjectGallery($projectId, $page, $limit);
         return new JsonResponse($gallery);
     }
 

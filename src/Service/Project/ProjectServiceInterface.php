@@ -15,4 +15,5 @@ interface ProjectServiceInterface
     public function addElementsToProject(array $elementsData): void;
     public function getElementsByProjectId(int $projectId): array;
     public function getSquadsByProjectId(int $projectId): array;
+    public function getProjectGallery(int $projectId, int $page, int $limit): ?array;
 }

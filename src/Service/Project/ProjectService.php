@@ -308,4 +308,20 @@ class ProjectService implements ProjectServiceInterface
             }
         }
     }
+
+    public function getProjectGallery(int $projectId, int $page, int $limit): ?array
+    {
+        $gallery = $this->imageRepository->getImagesByProjectId($projectId, $page, $limit);
+
+        $gallery['data'] = array_map(function($image) {
+            if($image['date'] instanceof \DateTime) {
+                $image['date'] = $image['date']->format('d/m/Y');
+            } else {
+                $image['date'] = (new \DateTime($image['date']))->format('d/m/Y');
+            }
+            return $image;
+        }, $gallery['data']);
+
+        return $gallery;
+    }
 }
