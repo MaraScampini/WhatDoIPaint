@@ -21,20 +21,28 @@ use Doctrine\ORM\EntityManagerInterface;
 class UpdateService implements UpdateServiceInterface
 {
     public function __construct(
-        private readonly UpdateRepositoryInterface $updateRepository,
-        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly UpdateRepositoryInterface        $updateRepository,
+        private readonly ImageRepositoryInterface         $imageRepository,
         private readonly ElementUpdateRepositoryInterface $elementUpdateRepository,
-        private readonly ProjectRepositoryInterface $projectRepository,
-        private readonly ElementRepositoryInterface $elementRepository,
-        private readonly SquadRepositoryInterface $squadRepository,
-        private readonly ImgurService $imgurService,
-        private readonly EntityManagerInterface $em
+        private readonly ProjectRepositoryInterface       $projectRepository,
+        private readonly ElementRepositoryInterface       $elementRepository,
+        private readonly SquadRepositoryInterface         $squadRepository,
+        private readonly ImgurService                     $imgurService,
+        private readonly EntityManagerInterface           $em
     )
-    {}
-    public function getUpdatesByProjectId(int $projectId, int $page = 1): array
     {
-        $updates = $this->updateRepository->getUpdatesByProjectId($projectId, $page);
+    }
+
+    public function getUpdatesForGeneralProjectByProjectId(int $projectId): array
+    {
+        $updates = $this->updateRepository->getUpdatesForGeneralProjectEndpoint($projectId);
         return $this->addImagesAndElementsToUpdates($updates);
+    }
+
+    public function getPaginatedUpdatesByProjectId(int $projectId, int $page, int $limit): ?array
+    {
+        $updates = $this->updateRepository->getUpdatesByProjectId($projectId, $page, $limit);
+        return $this->addImagesAndElementsToUpdates($updates, true);
     }
 
     public function getUpdateInformation(int $updateId): array
@@ -47,9 +55,16 @@ class UpdateService implements UpdateServiceInterface
 
     }
 
-    private function addImagesAndElementsToUpdates(array $updates): array
+    private function addImagesAndElementsToUpdates(array $updates, bool $isPaginated = false): array
     {
-        foreach($updates as &$update) {
+
+        if ($isPaginated) {
+            $updateData = $updates['data'];
+        } else {
+            $updateData = $updates;
+        }
+
+        foreach ($updateData as &$update) {
             $images = $this->imageRepository->getImagesByUpdateId($update['id']);
             $elements = $this->elementUpdateRepository->getElementsAndSquadsByUpdateId($update['id']);
             $update['images'] = $images;
@@ -62,7 +77,7 @@ class UpdateService implements UpdateServiceInterface
     public function createShortUpdate(int $projectId): Update
     {
         $project = $this->projectRepository->find($projectId);
-        if(!$project instanceof Project) throw new EntityNotFoundException('Project');
+        if (!$project instanceof Project) throw new EntityNotFoundException('Project');
 
         $update = new Update();
         $update->setProject($project);
@@ -78,8 +93,8 @@ class UpdateService implements UpdateServiceInterface
         $projectId = $request['projectId'];
         $newUpdate = $this->createShortUpdate($projectId);
 
-        if(isset($request['images'])) {
-            foreach($request['images'] as $image) {
+        if (isset($request['images'])) {
+            foreach ($request['images'] as $image) {
                 $imageURL = $this->imgurService->uploadImage($image);
                 $newImage = new Image();
                 $newImage->setUrl($imageURL);
@@ -89,12 +104,12 @@ class UpdateService implements UpdateServiceInterface
         }
 
         isset($request['title']) ? $newUpdate->setTitle($request['title']) : $newUpdate->setTitle('Painted today');
-        isset($request['description']) ?? $newUpdate->setDescription($request['description']);
+            isset($request['description']) ?? $newUpdate->setDescription($request['description']);
 
-        if(isset($request['elements'])) {
-            foreach($request['elements'] as $elementId) {
+        if (isset($request['elements'])) {
+            foreach ($request['elements'] as $elementId) {
                 $element = $this->elementRepository->find($elementId);
-                if(!$element instanceof Element) throw new EntityNotFoundException('Element');
+                if (!$element instanceof Element) throw new EntityNotFoundException('Element');
 
                 $elementUpdate = new ElementUpdate();
                 $elementUpdate->setNewUpdate($newUpdate);
@@ -103,10 +118,10 @@ class UpdateService implements UpdateServiceInterface
             }
         }
 
-        if(isset($request['squads'])) {
-            foreach($request['squads'] as $squadId) {
+        if (isset($request['squads'])) {
+            foreach ($request['squads'] as $squadId) {
                 $squad = $this->squadRepository->find($squadId);
-                if(!$squad instanceof Squad) throw new EntityNotFoundException('Squad');
+                if (!$squad instanceof Squad) throw new EntityNotFoundException('Squad');
 
                 $elementUpdate = new ElementUpdate();
                 $elementUpdate->setNewUpdate($newUpdate);

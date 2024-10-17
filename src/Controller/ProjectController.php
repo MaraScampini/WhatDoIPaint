@@ -42,8 +42,9 @@ class ProjectController extends AbstractController
     public function getUpdatesByProjectId(UpdateServiceInterface $updateService, Request $request, int $projectId): Response
     {
         $page = $request->query->getInt('page');
+        $limit = $request->query->getInt('limit');
 
-        $updates = $updateService->getUpdatesByProjectId($projectId, $page);
+        $updates = $updateService->getPaginatedUpdatesByProjectId($projectId, $page, $limit);
         return new JsonResponse($updates);
     }
 

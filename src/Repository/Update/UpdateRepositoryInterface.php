@@ -10,5 +10,6 @@ interface UpdateRepositoryInterface
     public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): ?array;
     public function getUpdatesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array;
+    public function getUpdatesForGeneralProjectEndpoint(int $projectId): ?array;
     public function getUpdateInformation(int $updateId): ?array;
 }
