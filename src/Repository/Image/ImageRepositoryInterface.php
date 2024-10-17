@@ -8,6 +8,7 @@ interface ImageRepositoryInterface
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): ?array;
     public function getImagesByUpdateId(int $updateId): ?array;
     public function getImagesByProjectId(int $projectId, int $page = 1, int $limit = 5): ?array;
+    public function getImagesForGeneralProjectEndpoint(int $projectId): ?array;
     public function getProjectCoverImage(int $projectId): array;
 
 }

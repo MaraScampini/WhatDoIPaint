@@ -31,6 +31,39 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
     {
         $offset = ($page - 1) * $limit;
 
+        $galleryQuery = $this->createQueryBuilder('IMAGE')
+            ->select('IMAGE.url')
+            ->leftJoin('IMAGE.newUpdate', 'IMAGE_UPDATE')
+            ->leftJoin('IMAGE_UPDATE.elementUpdates', 'ELEMENT_UPDATES')
+            ->leftJoin('ELEMENT_UPDATES.element', 'ELEMENT')
+            ->leftJoin('ELEMENT_UPDATES.Squad', 'SQUAD')
+            ->leftJoin('ELEMENT.project', 'ELEMENT_PROJECT')
+            ->leftJoin('SQUAD.project', 'SQUAD_PROJECT')
+            ->orWhere('ELEMENT_PROJECT.id = :projectId')
+            ->orWhere('SQUAD_PROJECT.id = :projectId')
+            ->orWhere('IMAGE_UPDATE.project = :projectId')
+            ->setParameter('projectId', $projectId);
+
+        $countQuery = clone($galleryQuery);
+
+        $total = $countQuery->select('COUNT(IMAGE.id)')->getQuery()->getSingleScalarResult();
+
+        $gallery = $galleryQuery
+            ->groupBy('IMAGE.id')
+            ->orderBy('IMAGE_UPDATE.date', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return [
+            'total' => $total,
+            'data' => $gallery
+        ];
+    }
+
+    public function getImagesForGeneralProjectEndpoint(int $projectId): ?array
+    {
         return $this->createQueryBuilder('IMAGE')
             ->select('IMAGE.url')
             ->leftJoin('IMAGE.newUpdate', 'IMAGE_UPDATE')
@@ -44,8 +77,8 @@ class ImageRepository extends ServiceEntityRepository implements ImageRepository
             ->orWhere('IMAGE_UPDATE.project = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('IMAGE.id')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
+            ->orderBy('IMAGE_UPDATE.date', 'DESC')
+            ->setMaxResults(5)
             ->getQuery()
             ->getSingleColumnResult();
     }

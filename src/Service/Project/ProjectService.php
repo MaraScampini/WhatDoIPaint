@@ -221,7 +221,7 @@ class ProjectService implements ProjectServiceInterface
         $projectElements = $this->elementRepository->getElementsByProjectId($projectId);
         $projectSquads = $this->squadRepository->getSquadsByProjectId($projectId);
         $projectSquads = $this->getElementsBySquad($projectSquads);
-        $projectGallery = $this->imageRepository->getImagesByProjectId($projectId);
+        $projectGallery = $this->imageRepository->getImagesForGeneralProjectEndpoint($projectId);
         $projectCoverImage = $this->imageRepository->getProjectCoverImage($projectId);
         $projectUpdates = $this->updateService->getUpdatesByProjectId($projectId);
 
