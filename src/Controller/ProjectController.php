@@ -51,8 +51,9 @@ class ProjectController extends AbstractController
     public function getGalleryByProjectId(ImageRepositoryInterface $imageRepository, Request $request, int $projectId): Response
     {
         $page = $request->query->getInt('page');
+        $limit = $request->query->getInt('limit');
 
-        $gallery = $imageRepository->getImagesByProjectId($projectId, $page);
+        $gallery = $imageRepository->getImagesByProjectId($projectId, $page, $limit);
         return new JsonResponse($gallery);
     }
 
