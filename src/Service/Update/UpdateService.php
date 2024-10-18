@@ -8,6 +8,7 @@ use App\Entity\Image;
 use App\Entity\Project;
 use App\Entity\Squad;
 use App\Entity\Update;
+use App\Entity\User;
 use App\Exception\EntityNotFoundException;
 use App\Repository\Element\ElementRepositoryInterface;
 use App\Repository\ElementUpdate\ElementUpdateRepositoryInterface;
@@ -16,6 +17,7 @@ use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\Squad\SquadRepositoryInterface;
 use App\Repository\Update\UpdateRepositoryInterface;
 use App\Service\Imgur\ImgurService;
+use App\Service\Streak\StreakServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateService implements UpdateServiceInterface
@@ -28,6 +30,7 @@ class UpdateService implements UpdateServiceInterface
         private readonly ElementRepositoryInterface       $elementRepository,
         private readonly SquadRepositoryInterface         $squadRepository,
         private readonly ImgurService                     $imgurService,
+        private readonly StreakServiceInterface           $streakService,
         private readonly EntityManagerInterface           $em
     )
     {
@@ -44,8 +47,8 @@ class UpdateService implements UpdateServiceInterface
         $updates = $this->updateRepository->getUpdatesByProjectId($projectId, $page, $limit);
         $updates['data'] = $this->addImagesAndElementsToUpdates($updates, true);
 
-        $updates['data'] = array_map(function($update) {
-            if($update['date'] instanceof \DateTime) {
+        $updates['data'] = array_map(function ($update) {
+            if ($update['date'] instanceof \DateTime) {
                 $update['date'] = $update['date']->format('d/m/Y');
             } else {
                 $update['date'] = (new \DateTime($update['date']))->format('d/m/Y');
@@ -84,7 +87,7 @@ class UpdateService implements UpdateServiceInterface
         return $updateData;
     }
 
-    public function createShortUpdate(int $projectId): Update
+    public function createShortUpdate(int $projectId, User $user): Update
     {
         $project = $this->projectRepository->find($projectId);
         if (!$project instanceof Project) throw new EntityNotFoundException('Project');
@@ -95,6 +98,8 @@ class UpdateService implements UpdateServiceInterface
         $update->setLastUpdate(new \DateTime());
         $project->setLastUpdate(new \DateTime());
         $this->em->persist($update);
+
+        $this->streakService->createOrUpdateStreak($user);
 
         return $update;
     }
@@ -140,6 +145,5 @@ class UpdateService implements UpdateServiceInterface
                 $this->em->persist($elementUpdate);
             }
         }
-
     }
 }

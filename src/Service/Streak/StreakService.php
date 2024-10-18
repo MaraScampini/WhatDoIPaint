@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class StreakService implements StreakServiceInterface
 {
-
     public function __construct(
         private readonly StreakRepositoryInterface $streakRepository,
         private readonly EntityManagerInterface $em

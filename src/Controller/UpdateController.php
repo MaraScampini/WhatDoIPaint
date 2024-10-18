@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Update;
+use App\Entity\User;
 use App\Service\Update\UpdateServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,9 @@ class UpdateController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em
     )
-    {}
+    {
+    }
+
     #[Route('/update/{updateId}', methods: ['GET'])]
     public function getUpdateInformation(UpdateServiceInterface $updateService, int $updateId): Response
     {
@@ -31,7 +34,9 @@ class UpdateController extends AbstractController
     #[Route('/update/short/{projectId}', methods: ['POST'])]
     public function createShortUpdate(UpdateServiceInterface $updateService, int $projectId): Response
     {
-            $updateService->createShortUpdate($projectId);
+        /** @var User $user */
+        $user = $this->getUser();
+        $updateService->createShortUpdate($projectId, $user);
         try {
             $this->em->flush();
         } catch (\Exception $e) {
