@@ -95,6 +95,7 @@ class UpdateService implements UpdateServiceInterface
         $update->setLastUpdate(new \DateTime());
         $project->setLastUpdate(new \DateTime());
         $this->em->persist($update);
+
         return $update;
     }
 
