@@ -8,6 +8,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<SquadStatus>
+ * @method SquadStatus|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SquadStatus|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SquadStatus[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class SquadStatusRepository extends ServiceEntityRepository implements SquadStatusRepositoryInterface
 {
@@ -22,6 +25,7 @@ class SquadStatusRepository extends ServiceEntityRepository implements SquadStat
             ->select('SQUAD_STATUS.amount, STATUS.name AS status')
             ->leftJoin('SQUAD_STATUS.status', 'STATUS')
             ->andWhere('SQUAD_STATUS.squad = :squad')
+            ->andWhere('SQUAD_STATUS.amount > 0')
             ->setParameter('squad', $squadId)
             ->groupBy('SQUAD_STATUS.id')
             ->getQuery()

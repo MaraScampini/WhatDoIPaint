@@ -28,7 +28,6 @@ class ElementRepository extends ServiceEntityRepository implements ElementReposi
             ->leftJoin('ELEMENT.status', 'STATUS')
             ->andWhere('PROJECT.id = :projectId')
             ->setParameter('projectId', $projectId)
-            ->andWhere('ELEMENT.Squad IS NULL')
             ->getQuery()
             ->getResult();
     }
@@ -40,19 +39,6 @@ class ElementRepository extends ServiceEntityRepository implements ElementReposi
             ->leftJoin('ELEMENT.project', 'PROJECT')
             ->andWhere('PROJECT.id = :projectId')
             ->setParameter('projectId', $projectId)
-            ->andWhere('ELEMENT.Squad IS NULL')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function getElementsBySquad(int $squadId): ?array
-    {
-        return $this->createQueryBuilder('ELEMENT')
-            ->select('STATUS.name AS status, COUNT(STATUS.name) AS amount')
-            ->leftJoin('ELEMENT.status', 'STATUS')
-            ->andWhere('ELEMENT.Squad = :squad')
-            ->setParameter('squad', $squadId)
-            ->groupBy('STATUS.id')
             ->getQuery()
             ->getResult();
     }

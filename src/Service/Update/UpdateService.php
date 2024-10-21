@@ -17,9 +17,11 @@ use App\Repository\ElementUpdate\ElementUpdateRepositoryInterface;
 use App\Repository\Image\ImageRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\Squad\SquadRepositoryInterface;
+use App\Repository\Squad\SquadStatusRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Update\UpdateRepositoryInterface;
 use App\Service\Imgur\ImgurService;
+use App\Service\Squad\SquadStatusServiceInterface;
 use App\Service\Streak\StreakServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -32,6 +34,7 @@ class UpdateService implements UpdateServiceInterface
         private readonly ProjectRepositoryInterface       $projectRepository,
         private readonly ElementRepositoryInterface       $elementRepository,
         private readonly SquadRepositoryInterface         $squadRepository,
+        private readonly SquadStatusServiceInterface $squadStatusService,
         private readonly ImgurService                     $imgurService,
         private readonly StreakServiceInterface           $streakService,
         private readonly EntityManagerInterface           $em, private readonly StatusRepositoryInterface $statusRepository
@@ -147,14 +150,12 @@ class UpdateService implements UpdateServiceInterface
         }
 
         if (isset($request['squads'])) {
-            foreach ($request['squads'] as $squadId) {
-                $squad = $this->squadRepository->find($squadId);
-                if (!$squad instanceof Squad) throw new EntityNotFoundException('Squad');
+            foreach ($request['squads'] as $squad) {
+                $squadId = $squad['id'];
+                $squadEntity = $this->squadRepository->find($squadId);
+                if (!$squadEntity instanceof Squad) throw new EntityNotFoundException('Squad');
 
-                $elementUpdate = new ElementUpdate();
-                $elementUpdate->setNewUpdate($newUpdate);
-                $elementUpdate->setSquad($squad);
-                $this->em->persist($elementUpdate);
+                $this->squadStatusService->updateSquadStatuses($squadEntity, $squad['elements']);
             }
         }
     }
