@@ -22,7 +22,7 @@ class SquadStatusRepository extends ServiceEntityRepository implements SquadStat
     public function getElementsBySquad(int $squadId): ?array
     {
         return $this->createQueryBuilder('SQUAD_STATUS')
-            ->select('SQUAD_STATUS.amount, STATUS.name AS status')
+            ->select('SQUAD_STATUS.amount, STATUS.id AS statusId, STATUS.name AS status')
             ->leftJoin('SQUAD_STATUS.status', 'STATUS')
             ->andWhere('SQUAD_STATUS.squad = :squad')
             ->andWhere('SQUAD_STATUS.amount > 0')
