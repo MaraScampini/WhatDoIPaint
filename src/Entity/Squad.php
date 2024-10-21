@@ -24,12 +24,6 @@ class Squad
     private ?Project $project = null;
 
     /**
-     * @var Collection<int, Element>
-     */
-    #[ORM\OneToMany(targetEntity: Element::class, mappedBy: 'Squad')]
-    private Collection $elements;
-
-    /**
      * @var Collection<int, ElementUpdate>
      */
     #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'Squad')]
@@ -49,7 +43,6 @@ class Squad
 
     public function __construct()
     {
-        $this->elements = new ArrayCollection();
         $this->elementUpdates = new ArrayCollection();
         $this->squadStatuses = new ArrayCollection();
     }
@@ -79,36 +72,6 @@ class Squad
     public function setProject(?Project $project): static
     {
         $this->project = $project;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Element>
-     */
-    public function getElements(): Collection
-    {
-        return $this->elements;
-    }
-
-    public function addElement(Element $element): static
-    {
-        if (!$this->elements->contains($element)) {
-            $this->elements->add($element);
-            $element->setSquad($this);
-        }
-
-        return $this;
-    }
-
-    public function removeElement(Element $element): static
-    {
-        if ($this->elements->removeElement($element)) {
-            // set the owning side to null (unless already changed)
-            if ($element->getSquad() === $this) {
-                $element->setSquad(null);
-            }
-        }
 
         return $this;
     }
