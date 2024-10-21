@@ -323,4 +323,16 @@ class ProjectService implements ProjectServiceInterface
 
         return $gallery;
     }
+
+    public function getSquadsAndElementsByProjectId(int $projectId): ?array
+    {
+        $projectElements = $this->elementRepository->getElementsByProjectId($projectId);
+        $projectSquads = $this->squadRepository->getSquadsByProjectId($projectId);
+        $projectSquads = $this->getElementsBySquad($projectSquads);
+
+        return [
+            'elements' => $projectElements,
+            'squads' => $projectSquads
+        ];
+    }
 }

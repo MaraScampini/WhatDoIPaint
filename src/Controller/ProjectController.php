@@ -156,5 +156,13 @@ class ProjectController extends AbstractController
         return new Response('Priority toggled correctly');
     }
 
+    #[Route('/project/fullelements/{projectId}', methods: ['GET'])]
+    public function getElementsAndSquadsByProjectId(ProjectServiceInterface $projectService, int $projectId): Response
+    {
+        $elementsAndSquads = $projectService->getSquadsAndElementsByProjectId($projectId);
+
+        return new JsonResponse($elementsAndSquads);
+    }
+
 
 }
