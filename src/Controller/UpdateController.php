@@ -49,9 +49,11 @@ class UpdateController extends AbstractController
     #[Route('/update', methods: ['POST'])]
     public function createUpdate(UpdateServiceInterface $updateService, Request $request): Response
     {
+        /**@var User $user */
+        $user = $this->getUser();
         $updateData = json_decode($request->getContent(), true);
 
-        $updateService->createUpdate($updateData);
+        $updateService->createUpdate($updateData, $user);
 
         try {
             $this->em->flush();

@@ -15,6 +15,6 @@ interface UpdateServiceInterface
 
     public function createShortUpdate(int $projectId, User $user): Update;
 
-    public function createUpdate(array $request): void;
+    public function createUpdate(array $request, User $user): void;
 
 }

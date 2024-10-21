@@ -7,14 +7,17 @@ use App\Entity\ElementUpdate;
 use App\Entity\Image;
 use App\Entity\Project;
 use App\Entity\Squad;
+use App\Entity\Status;
 use App\Entity\Update;
 use App\Entity\User;
+use App\Exception\CustomMessageException;
 use App\Exception\EntityNotFoundException;
 use App\Repository\Element\ElementRepositoryInterface;
 use App\Repository\ElementUpdate\ElementUpdateRepositoryInterface;
 use App\Repository\Image\ImageRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\Squad\SquadRepositoryInterface;
+use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Update\UpdateRepositoryInterface;
 use App\Service\Imgur\ImgurService;
 use App\Service\Streak\StreakServiceInterface;
@@ -31,7 +34,7 @@ class UpdateService implements UpdateServiceInterface
         private readonly SquadRepositoryInterface         $squadRepository,
         private readonly ImgurService                     $imgurService,
         private readonly StreakServiceInterface           $streakService,
-        private readonly EntityManagerInterface           $em
+        private readonly EntityManagerInterface           $em, private readonly StatusRepositoryInterface $statusRepository
     )
     {
     }
@@ -104,10 +107,10 @@ class UpdateService implements UpdateServiceInterface
         return $update;
     }
 
-    public function createUpdate(array $request): void
+    public function createUpdate(array $request, User $user): void
     {
         $projectId = $request['projectId'];
-        $newUpdate = $this->createShortUpdate($projectId);
+        $newUpdate = $this->createShortUpdate($projectId, $user);
 
         if (isset($request['images'])) {
             foreach ($request['images'] as $image) {
@@ -123,14 +126,23 @@ class UpdateService implements UpdateServiceInterface
             isset($request['description']) ?? $newUpdate->setDescription($request['description']);
 
         if (isset($request['elements'])) {
-            foreach ($request['elements'] as $elementId) {
+            foreach ($request['elements'] as $elementToUpdate) {
+                $elementId = $elementToUpdate['id'];
                 $element = $this->elementRepository->find($elementId);
                 if (!$element instanceof Element) throw new EntityNotFoundException('Element');
+
+                $elementProject = $element->getProject();
+                if($elementProject->getId() !== $projectId) throw new CustomMessageException('That element does not belong to that project');
 
                 $elementUpdate = new ElementUpdate();
                 $elementUpdate->setNewUpdate($newUpdate);
                 $elementUpdate->setElement($element);
                 $this->em->persist($elementUpdate);
+
+                $newStatusId = $elementToUpdate['status'];
+                $newStatus = $this->statusRepository->find($newStatusId);
+                if(!$newStatus instanceof Status) throw new EntityNotFoundException('Status');
+                $element->setStatus($newStatus);
             }
         }
 
