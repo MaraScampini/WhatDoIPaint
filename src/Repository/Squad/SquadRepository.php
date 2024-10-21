@@ -19,9 +19,9 @@ class SquadRepository extends ServiceEntityRepository implements SquadRepository
     public function getSquadsByProjectId(int $projectId): ?array
     {
         return $this->createQueryBuilder('SQUAD')
-            ->select('SQUAD.id, SQUAD.name, SQUAD.lastUpdate, COUNT(ELEMENT.id) AS amount')
+            ->select('SQUAD.id, SQUAD.name, SQUAD.lastUpdate, SQUAD.amount')
             ->leftJoin('SQUAD.project', 'PROJECT')
-            ->leftJoin('SQUAD.elements', 'ELEMENT')
+            ->leftJoin('SQUAD.squadStatuses', 'SQUAD_STATUS')
             ->andWhere('PROJECT.id = :projectId')
             ->setParameter('projectId', $projectId)
             ->groupBy('SQUAD.id')
@@ -41,4 +41,6 @@ class SquadRepository extends ServiceEntityRepository implements SquadRepository
             ->getResult();
 
     }
+
+
 }

@@ -44,6 +44,9 @@ class Squad
     #[ORM\OneToMany(targetEntity: SquadStatus::class, mappedBy: 'squad')]
     private Collection $squadStatuses;
 
+    #[ORM\Column]
+    private ?int $amount = null;
+
     public function __construct()
     {
         $this->elements = new ArrayCollection();
@@ -178,6 +181,18 @@ class Squad
                 $squadStatus->setSquad(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): static
+    {
+        $this->amount = $amount;
 
         return $this;
     }

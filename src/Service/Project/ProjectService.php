@@ -9,6 +9,7 @@ use App\Entity\Level;
 use App\Entity\Project;
 use App\Entity\ProjectTechnique;
 use App\Entity\Squad;
+use App\Entity\SquadStatus;
 use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\UserProjects;
@@ -22,6 +23,7 @@ use App\Repository\Level\LevelRepositoryInterface;
 use App\Repository\Project\ProjectRepositoryInterface;
 use App\Repository\ProjectTechnique\ProjectTechniqueRepositoryInterface;
 use App\Repository\Squad\SquadRepositoryInterface;
+use App\Repository\Squad\SquadStatusRepositoryInterface;
 use App\Repository\Status\StatusRepositoryInterface;
 use App\Repository\Technique\TechniqueRepositoryInterface;
 use App\Repository\Update\UpdateRepositoryInterface;
@@ -47,6 +49,7 @@ class ProjectService implements ProjectServiceInterface
         private readonly ProjectTechniqueRepositoryInterface $projectTechniqueRepository,
         private readonly ElementRepositoryInterface          $elementRepository,
         private readonly SquadRepositoryInterface            $squadRepository,
+        private readonly SquadStatusRepositoryInterface      $squadStatusRepository,
         private readonly ImageRepositoryInterface            $imageRepository,
         private readonly EntityManagerInterface              $em,
         private readonly ImgurService                        $imgurSE,
@@ -239,7 +242,7 @@ class ProjectService implements ProjectServiceInterface
     {
         foreach ($squads as &$squad) {
             $squadId = $squad['id'];
-            $elements = $this->elementRepository->getElementsBySquad($squadId);
+            $elements = $this->squadStatusRepository->getElementsBySquad($squadId);
             $squad['elements'] = $elements;
         }
 
@@ -287,15 +290,11 @@ class ProjectService implements ProjectServiceInterface
                         $squad->setLastUpdate(new \DateTime());
                         $squad->setName($newElement['name']);
                         $this->em->persist($squad);
-                        for ($i = 1; $i <= $newElement['amount']; $i++) {
-                            $element = new Element();
-                            $element->setProject($project);
-                            $element->setStatus($statusEntity);
-                            $element->setName($newElement['name'] . ' ' . $i);
-                            $element->setLastUpdate(new \DateTime());
-                            $element->setSquad($squad);
-                            $this->em->persist($element);
-                        }
+                        $squadStatus = new SquadStatus();
+                        $squadStatus->setSquad($squad);
+                        $squadStatus->setStatus($statusEntity);
+                        $squadStatus->setAmount($newElement['amount']);
+                        $this->em->persist($squadStatus);
                     } else if ($newElement['amount'] == 1) {
                         $element = new Element();
                         $element->setProject($project);
@@ -313,8 +312,8 @@ class ProjectService implements ProjectServiceInterface
     {
         $gallery = $this->imageRepository->getImagesByProjectId($projectId, $page, $limit);
 
-        $gallery['data'] = array_map(function($image) {
-            if($image['date'] instanceof \DateTime) {
+        $gallery['data'] = array_map(function ($image) {
+            if ($image['date'] instanceof \DateTime) {
                 $image['date'] = $image['date']->format('d/m/Y');
             } else {
                 $image['date'] = (new \DateTime($image['date']))->format('d/m/Y');
