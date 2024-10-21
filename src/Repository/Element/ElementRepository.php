@@ -23,7 +23,7 @@ class ElementRepository extends ServiceEntityRepository implements ElementReposi
     public function getElementsByProjectId(int $projectId): ?array
     {
         return $this->createQueryBuilder('ELEMENT')
-            ->select('ELEMENT.name, ELEMENT.lastUpdate, STATUS.id AS statusId, STATUS.name AS status')
+            ->select('ELEMENT.id, ELEMENT.name, ELEMENT.lastUpdate, STATUS.id AS statusId, STATUS.name AS status')
             ->leftJoin('ELEMENT.project', 'PROJECT')
             ->leftJoin('ELEMENT.status', 'STATUS')
             ->andWhere('PROJECT.id = :projectId')
