@@ -38,10 +38,17 @@ class Squad
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastUpdate = null;
 
+    /**
+     * @var Collection<int, SquadStatus>
+     */
+    #[ORM\OneToMany(targetEntity: SquadStatus::class, mappedBy: 'squad')]
+    private Collection $squadStatuses;
+
     public function __construct()
     {
         $this->elements = new ArrayCollection();
         $this->elementUpdates = new ArrayCollection();
+        $this->squadStatuses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +148,36 @@ class Squad
     public function setLastUpdate(\DateTimeInterface $lastUpdate): static
     {
         $this->lastUpdate = $lastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SquadStatus>
+     */
+    public function getSquadStatuses(): Collection
+    {
+        return $this->squadStatuses;
+    }
+
+    public function addSquadStatus(SquadStatus $squadStatus): static
+    {
+        if (!$this->squadStatuses->contains($squadStatus)) {
+            $this->squadStatuses->add($squadStatus);
+            $squadStatus->setSquad($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSquadStatus(SquadStatus $squadStatus): static
+    {
+        if ($this->squadStatuses->removeElement($squadStatus)) {
+            // set the owning side to null (unless already changed)
+            if ($squadStatus->getSquad() === $this) {
+                $squadStatus->setSquad(null);
+            }
+        }
 
         return $this;
     }
