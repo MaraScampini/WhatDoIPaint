@@ -58,7 +58,6 @@ class UpdateController extends AbstractController
         try {
             $this->em->flush();
         } catch (\Exception $e) {
-            return new Response($e->getMessage(), 500);
             return new Response('Update could not be saved', 500);
         }
         return new Response('Update created successfully', 200);

@@ -23,7 +23,7 @@ class SquadStatusService implements SquadStatusServiceInterface
     {
         foreach($elements as $element) {
             // GET STATUS ENTITY
-            $statusEntity = $this->statusRepository->find($element['status']);
+            $statusEntity = $this->statusRepository->find($element['statusId']);
 
             // FIND CURRENT SQUAD STATUS REGISTER AND SET AMOUNT
             $existingStatus = $this->squadStatusRepository->findOneBy(['squad' => $squad, 'status' => $statusEntity]);
