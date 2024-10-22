@@ -29,7 +29,6 @@ class ElementController extends AbstractController
         try {
             $this->em->flush();
         } catch (\Exception $exception) {
-            dd($exception->getMessage());
             return new Response('Elements could not be added', 500);
         }
         return new Response('Elements added successfully', 200);

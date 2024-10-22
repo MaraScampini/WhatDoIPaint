@@ -289,6 +289,7 @@ class ProjectService implements ProjectServiceInterface
                         $squad->setProject($project);
                         $squad->setLastUpdate(new \DateTime());
                         $squad->setName($newElement['name']);
+                        $squad->setAmount($newElement['amount']);
                         $this->em->persist($squad);
                         $squadStatus = new SquadStatus();
                         $squadStatus->setSquad($squad);
