@@ -135,7 +135,7 @@ class UpdateService implements UpdateServiceInterface
                 if (!$element instanceof Element) throw new EntityNotFoundException('Element');
 
                 $elementProject = $element->getProject();
-                if($elementProject->getId() !== $projectId) throw new CustomMessageException('That element does not belong to that project');
+                if($elementProject->getId() != $projectId) throw new CustomMessageException('That element does not belong to that project');
 
                 $elementUpdate = new ElementUpdate();
                 $elementUpdate->setNewUpdate($newUpdate);
