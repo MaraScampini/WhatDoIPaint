@@ -126,7 +126,7 @@ class UpdateService implements UpdateServiceInterface
         }
 
         isset($request['title']) ? $newUpdate->setTitle($request['title']) : $newUpdate->setTitle('Painted today');
-            isset($request['description']) ?? $newUpdate->setDescription($request['description']);
+        isset($request['description']) ? $newUpdate->setDescription($request['description']) : null;
 
         if (isset($request['elements'])) {
             foreach ($request['elements'] as $elementToUpdate) {
@@ -156,6 +156,11 @@ class UpdateService implements UpdateServiceInterface
                 if (!$squadEntity instanceof Squad) throw new EntityNotFoundException('Squad');
 
                 $this->squadStatusService->updateSquadStatuses($squadEntity, $squad['elements']);
+
+                $elementUpdate = new ElementUpdate();
+                $elementUpdate->setNewUpdate($newUpdate);
+                $elementUpdate->setSquad($squadEntity);
+                $this->em->persist($elementUpdate);
             }
         }
     }
