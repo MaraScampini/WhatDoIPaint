@@ -43,4 +43,5 @@ class SquadRepository extends ServiceEntityRepository implements SquadRepository
     }
 
 
+
 }

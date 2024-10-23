@@ -84,6 +84,12 @@ class Project
     #[ORM\OneToMany(targetEntity: Update::class, mappedBy: 'project')]
     private Collection $updates;
 
+    #[ORM\Column]
+    private ?bool $finished = null;
+
+    #[ORM\Column]
+    private ?bool $archived = null;
+
     public function __construct()
     {
         $this->projectTechniques = new ArrayCollection();
@@ -402,6 +408,30 @@ class Project
                 $update->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->finished;
+    }
+
+    public function setFinished(bool $finished): static
+    {
+        $this->finished = $finished;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): static
+    {
+        $this->archived = $archived;
 
         return $this;
     }

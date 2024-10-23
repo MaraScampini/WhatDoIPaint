@@ -336,4 +336,33 @@ class ProjectService implements ProjectServiceInterface
             'squads' => $projectSquads
         ];
     }
+
+    public function markProjectAsFinished(int $projectId): void
+    {
+        $project = $this->projectRE->find($projectId);
+        if(!$project instanceof Project) throw new EntityNotFoundException('Project');
+
+        $areProjectsFinished = $this->checkIfAllElementsAreFinished($project);
+        if(!$areProjectsFinished) throw new CustomMessageException('You must finish all your minis and squads first');
+
+        $project->setFinished(true);
+    }
+
+    private function checkIfAllElementsAreFinished(Project $project): bool
+    {
+        $elements = $project->getElements();
+        $finishedStatus = $this->statusRE->find(8);
+        foreach ($elements as $element) {
+            $status = $element->getStatus();
+            if($status !== $finishedStatus) return false;
+        }
+        $squads = $project->getSquads();
+        foreach ($squads as $squad) {
+            $squadAmount = $squad->getAmount();
+            $squadFinished = $this->squadStatusRepository->getFinishedElementsBySquad($squad);
+            if($squadAmount !== $squadFinished) return false;
+        }
+
+        return true;
+    }
 }

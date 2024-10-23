@@ -164,5 +164,19 @@ class ProjectController extends AbstractController
         return new JsonResponse($elementsAndSquads);
     }
 
+    #[Route('/project/finished/{projectId}', methods: ['PUT'])]
+    public function markProjectAsFinished(ProjectServiceInterface $projectService, int $projectId): Response
+    {
+        $projectService->markProjectAsFinished($projectId);
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return new Response('The project could not be finished', 500);
+        }
+
+        return new Response('Project finished', 200);
+    }
+
 
 }

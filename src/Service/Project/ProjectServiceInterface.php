@@ -27,4 +27,5 @@ interface ProjectServiceInterface
 
     public function getSquadsAndElementsByProjectId(int $projectId): ?array;
 
+    public function markProjectAsFinished(int $projectId): void;
 }

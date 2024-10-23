@@ -2,6 +2,7 @@
 
 namespace App\Repository\Squad;
 
+use App\Entity\Squad;
 use App\Entity\SquadStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -32,4 +33,15 @@ class SquadStatusRepository extends ServiceEntityRepository implements SquadStat
             ->getResult();
     }
 
+    public function getFinishedElementsBySquad(Squad $squad): ?int
+    {
+        return $this->createQueryBuilder('SQUAD_STATUS')
+            ->select('SQUAD_STATUS.amount')
+            ->andWhere('SQUAD_STATUS.squad = :squad')
+            ->andWhere('SQUAD_STATUS.status = :finished')
+            ->setParameter('squad', $squad)
+            ->setParameter('finished', 8)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
