@@ -56,13 +56,13 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
                 ->setParameter('search', '%' . $search . '%');
         }
 
-        if(isset($params['finished'])) {
+        if(isset($params['finished']) && filter_var($params['finished'], FILTER_VALIDATE_BOOLEAN)) {
             $baseQuery->andWhere('PROJECT.finished = true');
         } else {
             $baseQuery->andWhere('PROJECT.finished = false');
         }
 
-        if(isset($params['archived'])) {
+        if(isset($params['archived']) && filter_var($params['archived'], FILTER_VALIDATE_BOOLEAN)) {
             $baseQuery->andWhere('PROJECT.archived = true');
         } else {
             $baseQuery->andWhere('PROJECT.archived = false');
