@@ -23,7 +23,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
     public function getProjectBasicInfoById(int $id): ?array
     {
         return $this->createQueryBuilder('PROJECT')
-            ->select('PROJECT.id, PROJECT.name, PROJECT.description, BRAND.name AS brand, LEVEL.name AS level')
+            ->select('PROJECT.id, PROJECT.name, PROJECT.description, BRAND.name AS brand, LEVEL.name AS level, PROJECT.archived, PROJECT.finished')
             ->leftJoin('PROJECT.brand', 'BRAND')
             ->leftJoin('PROJECT.level', 'LEVEL')
             ->leftJoin('PROJECT.projectTechniques', 'PT')
