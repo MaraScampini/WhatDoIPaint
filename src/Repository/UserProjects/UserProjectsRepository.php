@@ -56,6 +56,18 @@ class UserProjectsRepository extends ServiceEntityRepository implements UserProj
                 ->setParameter('search', '%' . $search . '%');
         }
 
+        if(isset($params['finished'])) {
+            $baseQuery->andWhere('PROJECT.finished = true');
+        } else {
+            $baseQuery->andWhere('PROJECT.finished = false');
+        }
+
+        if(isset($params['archived'])) {
+            $baseQuery->andWhere('PROJECT.archived = true');
+        } else {
+            $baseQuery->andWhere('PROJECT.archived = false');
+        }
+
         $countQuery = clone($baseQuery);
         $total = $countQuery->select('COUNT(PROJECT.id) as total')
             ->getQuery()
