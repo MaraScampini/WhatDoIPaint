@@ -178,5 +178,19 @@ class ProjectController extends AbstractController
         return new Response('Project finished', 200);
     }
 
+    #[Route('/project/archived/{projectId}', methods: ['PUT'])]
+    public function toggleProjectArchived(ProjectServiceInterface $projectService, int $projectId): Response
+    {
+        $projectService->toggleProjectArchived($projectId);
+
+        try {
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return new Response('The project could not be archived', 500);
+        }
+
+        return new Response('Project archived', 200);
+    }
+
 
 }

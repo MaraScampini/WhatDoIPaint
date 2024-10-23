@@ -365,4 +365,16 @@ class ProjectService implements ProjectServiceInterface
 
         return true;
     }
+
+    public function toggleProjectArchived(int $projectId): void
+    {
+        $project = $this->projectRE->find($projectId);
+        if(!$project instanceof Project) throw new EntityNotFoundException('Project');
+
+        $isFinished = $project->isFinished();
+        if($isFinished) throw new CustomMessageException('You cannot archive a finished project');
+
+        $archivedStatus = $project->isArchived();
+        $project->setArchived(!$archivedStatus);
+    }
 }
