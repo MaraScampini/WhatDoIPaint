@@ -26,7 +26,7 @@ class Squad
     /**
      * @var Collection<int, ElementUpdate>
      */
-    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'Squad')]
+    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'Squad', cascade: ['remove'])]
     private Collection $elementUpdates;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -35,7 +35,7 @@ class Squad
     /**
      * @var Collection<int, SquadStatus>
      */
-    #[ORM\OneToMany(targetEntity: SquadStatus::class, mappedBy: 'squad')]
+    #[ORM\OneToMany(targetEntity: SquadStatus::class, mappedBy: 'squad', cascade: ['remove'])]
     private Collection $squadStatuses;
 
     #[ORM\Column]
