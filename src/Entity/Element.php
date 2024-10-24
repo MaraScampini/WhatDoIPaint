@@ -25,7 +25,7 @@ class Element
     /**
      * @var Collection<int, ElementUpdate>
      */
-    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'element')]
+    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'element', cascade:['remove'])]
     private Collection $elementUpdates;
 
     #[ORM\ManyToOne(inversedBy: 'elements')]
