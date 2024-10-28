@@ -15,11 +15,11 @@ class StaticUtilities
     public static function getLevelSelector(): array
     {
         return [
-            ['id' => self::$LEVEL_RELAX, 'name' => 'Relaxed'],
-            ['id' => self::$LEVEL_FOCUSED, 'name' => 'Focused'],
-            ['id' => self::$LEVEL_ALL_OUT, 'name' => 'All out'],
-            ['id' => self::$LEVEL_COMPETITION, 'name' => 'Competition'],
-            ['id' => self::$LEVEL_ARMY_PAINTING, 'name' => 'Army painting']
+            ['id' => self::$LEVEL_RELAX, 'label' => 'Relaxed'],
+            ['id' => self::$LEVEL_FOCUSED, 'label' => 'Focused'],
+            ['id' => self::$LEVEL_ALL_OUT, 'label' => 'All out'],
+            ['id' => self::$LEVEL_COMPETITION, 'label' => 'Competition'],
+            ['id' => self::$LEVEL_ARMY_PAINTING, 'label' => 'Army painting']
         ];
     }
 
@@ -40,23 +40,23 @@ class StaticUtilities
     public static int $TECHNIQUE_TMM = 13;
     public static int $TECHNIQUE_HAIR_FUR = 14;
 
-    public static function techniqueSelector(): array
+    public static function getTechniquesSelector(): array
     {
         return [
-            ['id' => self::$TECHNIQUE_LAYERING, 'name' => 'Layering'],
-            ['id' => self::$TECHNIQUE_NMM, 'name' => 'Non-Metallic Metal (NMM)'],
-            ['id' => self::$TECHNIQUE_OSL, 'name' => 'Object Source Lighting (OSL)'],
-            ['id' => self::$TECHNIQUE_SKIN, 'name' => 'Skin'],
-            ['id' => self::$TECHNIQUE_FABRIC, 'name' => 'Fabric'],
-            ['id' => self::$TECHNIQUE_LEATHER, 'name' => 'Leather'],
-            ['id' => self::$TECHNIQUE_GEMS, 'name' => 'Gems'],
-            ['id' => self::$TECHNIQUE_WEATHERING, 'name' => 'Weathering'],
-            ['id' => self::$TECHNIQUE_WET_BLENDING, 'name' => 'Wet blending'],
-            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'name' => 'Dry brush'],
-            ['id' => self::$TECHNIQUE_BASING, 'name' => 'Basing'],
-            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'name' => 'Stippled blending'],
-            ['id' => self::$TECHNIQUE_TMM, 'name' => 'True Metallic Metal (TMM)'],
-            ['id' => self::$TECHNIQUE_HAIR_FUR, 'name' => 'Hair or animal fur']
+            ['id' => self::$TECHNIQUE_LAYERING, 'value' => self::$TECHNIQUE_LAYERING, 'label' => 'Layering'],
+            ['id' => self::$TECHNIQUE_NMM, 'value' => self::$TECHNIQUE_NMM, 'label' => 'Non-Metallic Metal (NMM)'],
+            ['id' => self::$TECHNIQUE_OSL, 'value' => self::$TECHNIQUE_OSL, 'label' => 'Object Source Lighting (OSL)'],
+            ['id' => self::$TECHNIQUE_SKIN, 'value' => self::$TECHNIQUE_SKIN, 'label' => 'Skin'],
+            ['id' => self::$TECHNIQUE_FABRIC, 'value' => self::$TECHNIQUE_FABRIC, 'label' => 'Fabric'],
+            ['id' => self::$TECHNIQUE_LEATHER, 'value' => self::$TECHNIQUE_LEATHER, 'label' => 'Leather'],
+            ['id' => self::$TECHNIQUE_GEMS, 'value' => self::$TECHNIQUE_GEMS, 'label' => 'Gems'],
+            ['id' => self::$TECHNIQUE_WEATHERING, 'value' => self::$TECHNIQUE_WEATHERING, 'label' => 'Weathering'],
+            ['id' => self::$TECHNIQUE_WET_BLENDING, 'value' => self::$TECHNIQUE_WET_BLENDING, 'label' => 'Wet blending'],
+            ['id' => self::$TECHNIQUE_DRY_BRUSH, 'value' => self::$TECHNIQUE_DRY_BRUSH, 'label' => 'Dry brush'],
+            ['id' => self::$TECHNIQUE_BASING, 'value' => self::$TECHNIQUE_BASING, 'label' => 'Basing'],
+            ['id' => self::$TECHNIQUE_STIPPLED_BLENDING, 'value' => self::$TECHNIQUE_STIPPLED_BLENDING, 'label' => 'Stippled blending'],
+            ['id' => self::$TECHNIQUE_TMM, 'value' => self::$TECHNIQUE_TMM, 'label' => 'True Metallic Metal (TMM)'],
+            ['id' => self::$TECHNIQUE_HAIR_FUR, 'value' => self::$TECHNIQUE_HAIR_FUR, 'label' => 'Hair or animal fur']
         ];
     }
 
@@ -76,15 +76,15 @@ class StaticUtilities
     public static function getStatusSelector(): array
     {
         return [
-            ['id' => self::$STATUS_BOX, 'name' => 'Box'],
-            ['id' => self::$STATUS_SPRUE, 'name' => 'Sprue'],
-            ['id' => self::$STATUS_PRINTED, 'name' => 'Printed'],
-            ['id' => self::$STATUS_ASSEMBLED, 'name' => 'Assembled'],
-            ['id' => self::$STATUS_PRIMED, 'name' => 'Primed'],
-            ['id' => self::$STATUS_HALF_PAINTED, 'name' => 'Half painted'],
-            ['id' => self::$STATUS_ON_HOLD, 'name' => 'On hold'],
-            ['id' => self::$STATUS_PAINTED, 'name' => 'Painted'],
-            ['id' => self::$STATUS_FINISHED, 'name' => 'Finished'],
+            ['id' => self::$STATUS_BOX, 'label' => 'Box'],
+            ['id' => self::$STATUS_SPRUE, 'label' => 'Sprue'],
+            ['id' => self::$STATUS_PRINTED, 'label' => 'Printed'],
+            ['id' => self::$STATUS_ASSEMBLED, 'label' => 'Assembled'],
+            ['id' => self::$STATUS_PRIMED, 'label' => 'Primed'],
+            ['id' => self::$STATUS_HALF_PAINTED, 'label' => 'Half painted'],
+            ['id' => self::$STATUS_ON_HOLD, 'label' => 'On hold'],
+            ['id' => self::$STATUS_PAINTED, 'label' => 'Painted'],
+            ['id' => self::$STATUS_FINISHED, 'label' => 'Finished'],
         ];
     }
 

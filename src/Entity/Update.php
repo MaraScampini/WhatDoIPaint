@@ -35,9 +35,22 @@ class Update
     #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'newUpdate')]
     private Collection $elementUpdates;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $title = null;
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'newUpdate')]
+    private Collection $images;
+
+    #[ORM\ManyToOne(inversedBy: 'updates')]
+    private ?Project $project = null;
+
     public function __construct()
     {
         $this->elementUpdates = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,6 +132,60 @@ class Update
                 $elementUpdate->setNewUpdate(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setNewUpdate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getNewUpdate() === $this) {
+                $image->setNewUpdate(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

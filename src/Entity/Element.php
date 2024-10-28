@@ -19,21 +19,24 @@ class Element
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastUpdate = null;
 
     /**
      * @var Collection<int, ElementUpdate>
      */
-    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'element')]
+    #[ORM\OneToMany(targetEntity: ElementUpdate::class, mappedBy: 'element', cascade:['remove'])]
     private Collection $elementUpdates;
 
     #[ORM\ManyToOne(inversedBy: 'elements')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'elements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
+
+
 
     public function __construct()
     {
@@ -53,18 +56,6 @@ class Element
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -119,6 +110,18 @@ class Element
     public function setStatus(?Status $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

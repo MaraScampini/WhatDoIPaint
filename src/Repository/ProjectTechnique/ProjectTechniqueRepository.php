@@ -12,11 +12,22 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ProjectTechnique|null findOneBy(array $criteria, array $orderBy = null)
  * @method ProjectTechnique[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProjectTechniqueRepository extends ServiceEntityRepository
+class ProjectTechniqueRepository extends ServiceEntityRepository implements ProjectTechniqueRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProjectTechnique::class);
     }
 
+    public function getProjectTechniquesByProjectId(int $projectId): ?array
+    {
+        return $this->createQueryBuilder('PROJECT_TECHNIQUE')
+            ->select('TECHNIQUE.name AS technique')
+            ->leftJoin('PROJECT_TECHNIQUE.project', 'PROJECT')
+            ->leftJoin('PROJECT_TECHNIQUE.technique', 'TECHNIQUE')
+            ->andWhere('PROJECT.id = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

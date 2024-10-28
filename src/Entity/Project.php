@@ -28,9 +28,6 @@ class Project
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastUpdate = null;
 
-    #[ORM\Column]
-    private ?bool $isPriority = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -63,11 +60,45 @@ class Project
     #[ORM\OneToMany(targetEntity: UserProjects::class, mappedBy: 'project')]
     private Collection $userProjects;
 
+    /**
+     * @var Collection<int, Element>
+     */
+    #[ORM\OneToMany(targetEntity: Element::class, mappedBy: 'project')]
+    private Collection $elements;
+
+    /**
+     * @var Collection<int, Squad>
+     */
+    #[ORM\OneToMany(targetEntity: Squad::class, mappedBy: 'project')]
+    private Collection $squads;
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'project')]
+    private Collection $images;
+
+    /**
+     * @var Collection<int, Update>
+     */
+    #[ORM\OneToMany(targetEntity: Update::class, mappedBy: 'project')]
+    private Collection $updates;
+
+    #[ORM\Column]
+    private ?bool $finished = null;
+
+    #[ORM\Column]
+    private ?bool $archived = null;
+
     public function __construct()
     {
         $this->projectTechniques = new ArrayCollection();
         $this->reference = new ArrayCollection();
         $this->userProjects = new ArrayCollection();
+        $this->elements = new ArrayCollection();
+        $this->squads = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->updates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,18 +150,6 @@ class Project
     public function setLastUpdate(\DateTimeInterface $lastUpdate): static
     {
         $this->lastUpdate = $lastUpdate;
-
-        return $this;
-    }
-
-    public function isPriority(): ?bool
-    {
-        return $this->isPriority;
-    }
-
-    public function setPriority(bool $isPriority): static
-    {
-        $this->isPriority = $isPriority;
 
         return $this;
     }
@@ -269,6 +288,150 @@ class Project
                 $userProject->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Element>
+     */
+    public function getElements(): Collection
+    {
+        return $this->elements;
+    }
+
+    public function addElement(Element $element): static
+    {
+        if (!$this->elements->contains($element)) {
+            $this->elements->add($element);
+            $element->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElement(Element $element): static
+    {
+        if ($this->elements->removeElement($element)) {
+            // set the owning side to null (unless already changed)
+            if ($element->getProject() === $this) {
+                $element->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Squad>
+     */
+    public function getSquads(): Collection
+    {
+        return $this->squads;
+    }
+
+    public function addSquad(Squad $squad): static
+    {
+        if (!$this->squads->contains($squad)) {
+            $this->squads->add($squad);
+            $squad->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSquad(Squad $squad): static
+    {
+        if ($this->squads->removeElement($squad)) {
+            // set the owning side to null (unless already changed)
+            if ($squad->getProject() === $this) {
+                $squad->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getProject() === $this) {
+                $image->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Update>
+     */
+    public function getUpdates(): Collection
+    {
+        return $this->updates;
+    }
+
+    public function addUpdate(Update $update): static
+    {
+        if (!$this->updates->contains($update)) {
+            $this->updates->add($update);
+            $update->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdate(Update $update): static
+    {
+        if ($this->updates->removeElement($update)) {
+            // set the owning side to null (unless already changed)
+            if ($update->getProject() === $this) {
+                $update->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->finished;
+    }
+
+    public function setFinished(bool $finished): static
+    {
+        $this->finished = $finished;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): static
+    {
+        $this->archived = $archived;
 
         return $this;
     }

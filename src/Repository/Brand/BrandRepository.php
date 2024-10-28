@@ -24,7 +24,7 @@ class BrandRepository extends ServiceEntityRepository implements BrandRepository
     public function getBrandsSelector(User $user): array
     {
         return $this->createQueryBuilder('BRAND')
-            ->select('BRAND.id', 'BRAND.name')
+            ->select('BRAND.id', 'BRAND.name as label')
             ->andWhere('BRAND.isGeneric = true')
             ->orWhere('BRAND.user = :user')
             ->setParameter('user', $user)

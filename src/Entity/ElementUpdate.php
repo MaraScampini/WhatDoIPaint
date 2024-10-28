@@ -14,12 +14,15 @@ class ElementUpdate
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'elementUpdates')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Element $element = null;
 
     #[ORM\ManyToOne(inversedBy: 'elementUpdates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Update $newUpdate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'elementUpdates')]
+    private ?Squad $Squad = null;
 
     public function getId(): ?int
     {
@@ -46,6 +49,18 @@ class ElementUpdate
     public function setNewUpdate(?Update $newUpdate): static
     {
         $this->newUpdate = $newUpdate;
+
+        return $this;
+    }
+
+    public function getSquad(): ?Squad
+    {
+        return $this->Squad;
+    }
+
+    public function setSquad(?Squad $Squad): static
+    {
+        $this->Squad = $Squad;
 
         return $this;
     }

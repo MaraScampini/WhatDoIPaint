@@ -48,10 +48,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserProjects::class, mappedBy: 'user')]
     private Collection $userProjects;
 
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'user')]
+    private Collection $images;
+
+    /**
+     * @var Collection<int, Streak>
+     */
+    #[ORM\OneToMany(targetEntity: Streak::class, mappedBy: 'user')]
+    private Collection $streaks;
+
     public function __construct()
     {
         $this->brands = new ArrayCollection();
         $this->userProjects = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->streaks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +208,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userProject->getUser() === $this) {
                 $userProject->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getUser() === $this) {
+                $image->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Streak>
+     */
+    public function getStreaks(): Collection
+    {
+        return $this->streaks;
+    }
+
+    public function addStreak(Streak $streak): static
+    {
+        if (!$this->streaks->contains($streak)) {
+            $this->streaks->add($streak);
+            $streak->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStreak(Streak $streak): static
+    {
+        if ($this->streaks->removeElement($streak)) {
+            // set the owning side to null (unless already changed)
+            if ($streak->getUser() === $this) {
+                $streak->setUser(null);
             }
         }
 

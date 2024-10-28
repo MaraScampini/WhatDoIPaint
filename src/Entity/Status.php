@@ -30,10 +30,17 @@ class Status
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'status')]
     private Collection $projects;
 
+    /**
+     * @var Collection<int, SquadStatus>
+     */
+    #[ORM\OneToMany(targetEntity: SquadStatus::class, mappedBy: 'status')]
+    private Collection $squadStatuses;
+
     public function __construct()
     {
         $this->elements = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->squadStatuses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +114,36 @@ class Status
             // set the owning side to null (unless already changed)
             if ($project->getStatus() === $this) {
                 $project->setStatus(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SquadStatus>
+     */
+    public function getSquadStatuses(): Collection
+    {
+        return $this->squadStatuses;
+    }
+
+    public function addSquadStatus(SquadStatus $squadStatus): static
+    {
+        if (!$this->squadStatuses->contains($squadStatus)) {
+            $this->squadStatuses->add($squadStatus);
+            $squadStatus->setStatus($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSquadStatus(SquadStatus $squadStatus): static
+    {
+        if ($this->squadStatuses->removeElement($squadStatus)) {
+            // set the owning side to null (unless already changed)
+            if ($squadStatus->getStatus() === $this) {
+                $squadStatus->setStatus(null);
             }
         }
 
